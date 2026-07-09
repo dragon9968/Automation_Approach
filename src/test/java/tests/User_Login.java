@@ -50,8 +50,8 @@ public class User_Login extends BaseTest{
 	public void Login_06_Valid_Login() {
 		homePage.openLoginPage();
 		loginPage = PageGeneratorManager.getLoginPageTechPanda(driver_Test_Case);
-        loginPage.inputToEmailTexbox("long_tester_pro@gmail.com");
-        loginPage.inputToPasswordTexbox("123456");
+        loginPage.inputToEmailTextbox("long_tester_pro@gmail.com");
+        loginPage.inputToPasswordTextbox("123456");
         loginPage.clickToLoginButton();
 
 	}

@@ -20,7 +20,7 @@ public class RegisterSteps{
     @Given("the user is on the TechPanda homepage")
     public void theUserIsOnTheTechPandaHomepage() {
         driver = CucumberHooks.getDriver();
-        this.homePage = PageGeneratorManager.getHomePageTechPanda(driver);   }
+        homePage = PageGeneratorManager.getHomePageTechPanda(driver);   }
 
     @When("the user navigates to the Registration page")
     public void theUserNavigatesToTheRegistrationPage() {

@@ -20,12 +20,12 @@ public class UserLoginPageObject_Techpanda extends BasePage {
 		return PageGeneratorManager.getHomePageTechPanda(driver);
 	}
 
-	public void inputToEmailTexbox(String Email) {
+	public void inputToEmailTextbox(String Email) {
 		waitForElementVisible(driver, LoginPageUI_Techpanda.EMAIL_TEXTBOX);
 		sendkeyToElement(driver, LoginPageUI_Techpanda.EMAIL_TEXTBOX, Email);
 	}
 
-	public void inputToPasswordTexbox(String Password) {
+	public void inputToPasswordTextbox(String Password) {
 		waitForElementVisible(driver, LoginPageUI_Techpanda.PASSWORD_TEXTBOX);
 		sendkeyToElement(driver, LoginPageUI_Techpanda.PASSWORD_TEXTBOX, Password);
 	}
@@ -41,8 +41,8 @@ public class UserLoginPageObject_Techpanda extends BasePage {
 	}
 
 	public UserHomePageObject_Techpanda loginAsUser(String emailAddress , String password) {
-		inputToEmailTexbox(emailAddress);
-		inputToPasswordTexbox(password);
+		inputToEmailTextbox(emailAddress);
+		inputToPasswordTextbox(password);
 		clickToLoginButton();
 		return PageGeneratorManager.getHomePageTechPanda(driver);
 	}

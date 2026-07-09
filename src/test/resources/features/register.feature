@@ -1,3 +1,4 @@
+@register
 Feature: TechPanda Account Registration
 
   Scenario: Register with a password less than 6 characters
