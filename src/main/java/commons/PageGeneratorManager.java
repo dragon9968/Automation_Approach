@@ -1,0 +1,25 @@
+package commons;
+
+import org.openqa.selenium.WebDriver;
+
+
+import pageObjects.UserRegisterPageObject_Techpanda;
+import pageObjects.UserHomePageObject_Techpanda;
+import pageObjects.UserLoginPageObject_Techpanda;
+
+
+public class PageGeneratorManager {
+
+	public static UserHomePageObject_Techpanda getHomePageTechPanda(WebDriver driver) {
+		return new UserHomePageObject_Techpanda(driver);
+	}
+	
+	public static UserRegisterPageObject_Techpanda getRegisterPageTechPanda(WebDriver driver) {
+		return new UserRegisterPageObject_Techpanda(driver);
+	}
+	
+	public static UserLoginPageObject_Techpanda getLoginPageTechPanda(WebDriver driver) {
+		return new UserLoginPageObject_Techpanda(driver);
+	}
+	
+}
