@@ -1,8 +1,10 @@
 package stepDefinitions;
 
+import java.util.Map;
+
+import dtos.UserLoginDTO;
 import dtos.UserRegisterDTO;
 import io.cucumber.java.DataTableType;
-import java.util.Map;
 
 public class DataTransformer {
 
@@ -15,6 +17,14 @@ public class DataTransformer {
             row.get("email"),
             row.get("password"),
             row.get("confirmPassword")
+        );
+    }
+    
+    @DataTableType
+    public UserLoginDTO userLoginTransformer(Map<String, String> row) {
+        return new UserLoginDTO(
+            row.get("email"),
+            row.get("password")
         );
     }
 }
