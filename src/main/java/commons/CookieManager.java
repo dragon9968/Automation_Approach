@@ -13,8 +13,12 @@ public class CookieManager {
     public static void saveCookiesToFile(Cookies apiCookies) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(COOKIE_FILE_PATH))) {
             for (Cookie cookie : apiCookies) {
-                writer.write(cookie.getName() + "|" + cookie.getValue() + "|" + 
-                             cookie.getDomain() + "|" + cookie.getPath());
+                
+                // 🌟 KHÓA CHÍ MẠNG: Nếu domain hoặc path bị null, ép về giá trị chuẩn của website luôn
+                String domain = (cookie.getDomain() != null) ? cookie.getDomain() : "live.techpanda.org";
+                String path = (cookie.getPath() != null) ? cookie.getPath() : "/";
+                
+                writer.write(cookie.getName() + "|" + cookie.getValue() + "|" + domain + "|" + path);
                 writer.newLine();
             }
             System.out.println("--> [INFO] Đã lưu session login vào file: " + COOKIE_FILE_PATH);
@@ -28,16 +32,20 @@ public class CookieManager {
         List<org.openqa.selenium.Cookie> seleniumCookies = new ArrayList<>();
         File file = new File(COOKIE_FILE_PATH);
         
-        if (!file.exists()) return seleniumCookies; // Nếu file chưa tồn tại thì trả về mảng rỗng
+        if (!file.exists()) return seleniumCookies;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split("\\|");
                 if (tokens.length >= 4) {
+                    // Loại bỏ trường hợp nếu file cũ còn sót chữ "null" lọt vào
+                    String domain = tokens[2].equals("null") ? "live.techpanda.org" : tokens[2];
+                    String path = tokens[3].equals("null") ? "/" : tokens[3];
+
                     org.openqa.selenium.Cookie selCookie = new org.openqa.selenium.Cookie.Builder(tokens[0], tokens[1])
-                            .domain(tokens[2])
-                            .path(tokens[3])
+                            .domain(domain)
+                            .path(path)
                             .build();
                     seleniumCookies.add(selCookie);
                 }

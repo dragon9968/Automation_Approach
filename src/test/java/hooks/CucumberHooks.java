@@ -21,6 +21,15 @@ public class CucumberHooks extends BaseTest {
     @Before(value = "@use_session", order = 2)
     public void handleAutoLoginSession() {
         org.openqa.selenium.WebDriver driver = threadDriver.get();
+        
+        // Trình duyệt hiện tại đang đứng ở trang chủ nhờ BaseTest chạy trước đó...
+
+        // =========================================================================
+        // 🌟 BƯỚC THẦN THÁNH BỊ THIẾU: Xóa sạch con cookie "Khách" đang có sẵn trong Chrome
+        // =========================================================================
+        driver.manage().deleteAllCookies(); 
+
+        // Sau khi Chrome trống trơn không còn cookie khách nữa, mình mới tiến hành đọc file và bơm cookie Vip vào
         java.util.List<org.openqa.selenium.Cookie> savedCookies = commons.CookieManager.loadCookiesFromFile();
 
         // Nếu file trống trơn (lần đầu chạy), tự động gọi API Login để lấy cookies mới và lưu lại
@@ -35,16 +44,16 @@ public class CucumberHooks extends BaseTest {
             // Lưu cookies thu được từ API vào file dữ liệu
             commons.CookieManager.saveCookiesToFile(responseData.getCookies());
             
-            // Đọc lại mảng cookies vừa lưu
+            // Đọc lại mảng cookies vừa lưu vào list
             savedCookies = commons.CookieManager.loadCookiesFromFile();
         }
 
-        // BƠM COOKIES vào trình duyệt đang mở
+        // BƠM COOKIES VIP VÀO TRÌNH DUYỆT (Lúc này Chrome sẽ nhận 100% vì không còn cookie trùng tên cũ)
         for (org.openqa.selenium.Cookie cookie : savedCookies) {
             driver.manage().addCookie(cookie);
         }
 
-        // Refresh một phát để giao diện ăn session đăng nhập luôn vĩnh viễn!
+        // REFRESH LÀM MỚI TRANG: Để trình duyệt gửi con Cookie Vip này lên bắt Server trả về giao diện Đã đăng nhập
         driver.navigate().refresh();
         System.out.println("=== [SUCCESS] TRÌNH DUYỆT ĐÃ ĐƯỢC AUTO LOGIN SẴN SÀNG KHỞI CHẠY TEST CASE ===");
     }
