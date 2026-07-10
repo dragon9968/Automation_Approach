@@ -39,13 +39,26 @@ public class BaseTest {
 	
 	public WebDriver getBrowserName(String browserName) {
 		if (browserName.equalsIgnoreCase("fireFox")) {
+            FirefoxOptions options = new FirefoxOptions();        
+            options.addPreference("security.warn_submit_secure_to_insecure", false);
+            options.addPreference("security.warn_submit_insecure", false);
+            options.addPreference("security.insecure_field_warning.contextual.enabled", false);
+            options.addPreference("dom.security.https_only_mode", false);
+            options.addArguments("--user-agent=AutomationBrowser");	
 			driverBaseTest = new FirefoxDriver();
+			
 		} else if(browserName.equalsIgnoreCase("chrome")) {
 			ChromeOptions options = new ChromeOptions();
 			options.setExperimentalOption("useAutomationExtension", false);
 			options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
-
+            options.addArguments("--allow-running-insecure-content");
+            options.addArguments("--ignore-certificate-errors");
+            options.addArguments("--disable-web-security");
+            options.addArguments("--unsafely-treat-insecure-origin-as-secure=http://live.techpanda.org");
+            options.addArguments("--user-data-dir=" + System.getProperty("java.io.tmpdir") + "chrome_automation_profile" + System.currentTimeMillis());
+            options.addArguments("--user-agent=AutomationBrowser");	
 			driverBaseTest = new ChromeDriver(options);
+			
 		} else if(browserName.equalsIgnoreCase("edge")) {
 			driverBaseTest = new EdgeDriver();
 

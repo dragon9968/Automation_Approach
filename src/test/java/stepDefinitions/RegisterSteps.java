@@ -13,17 +13,18 @@ import java.util.List;
 import java.util.Random;
 
 public class RegisterSteps{
-     WebDriver driver;
+     WebDriver driver= CucumberHooks.getDriver();
      UserHomePageObject_Techpanda homePage;
      UserRegisterPageObject_Techpanda registerPage;
      
     @Given("the user is on the TechPanda homepage")
     public void theUserIsOnTheTechPandaHomepage() {
-        driver = CucumberHooks.getDriver();
-        homePage = PageGeneratorManager.getHomePageTechPanda(driver);   }
+    	System.out.println("=== Background: User is on Homepage ===");
+    }
 
     @When("the user navigates to the Registration page")
     public void theUserNavigatesToTheRegistrationPage() {
+    	homePage = PageGeneratorManager.getHomePageTechPanda(driver); 
         homePage.openRegisterPage();
         registerPage = PageGeneratorManager.getRegisterPageTechPanda(driver);
     }
