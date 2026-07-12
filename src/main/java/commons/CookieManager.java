@@ -39,13 +39,13 @@ public class CookieManager {
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split("\\|");
                 if (tokens.length >= 4) {
-                    // Loại bỏ trường hợp nếu file cũ còn sót chữ "null" lọt vào
                     String domain = tokens[2].equals("null") ? "live.techpanda.org" : tokens[2];
                     String path = tokens[3].equals("null") ? "/" : tokens[3];
 
                     org.openqa.selenium.Cookie selCookie = new org.openqa.selenium.Cookie.Builder(tokens[0], tokens[1])
                             .domain(domain)
                             .path(path)
+                            .isSecure(false) // 🌟 BỔ SUNG DÒNG NÀY: Ép false để chạy trên HTTP thường của TechPanda
                             .build();
                     seleniumCookies.add(selCookie);
                 }

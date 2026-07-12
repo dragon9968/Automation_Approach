@@ -17,46 +17,48 @@ public class CucumberHooks extends BaseTest {
             threadDriver.set(driver);
         }
     }
-    
+
     @Before(value = "@use_session", order = 2)
     public void handleAutoLoginSession() {
         org.openqa.selenium.WebDriver driver = threadDriver.get();
-        
-        // Trình duyệt hiện tại đang đứng ở trang chủ nhờ BaseTest chạy trước đó...
 
-        // =========================================================================
-        // 🌟 BƯỚC THẦN THÁNH BỊ THIẾU: Xóa sạch con cookie "Khách" đang có sẵn trong Chrome
-        // =========================================================================
-        driver.manage().deleteAllCookies(); 
+        // 1. Xóa sạch bách mọi cookie khách vãng lai của Chrome trước
+        driver.manage().deleteAllCookies();
 
-        // Sau khi Chrome trống trơn không còn cookie khách nữa, mình mới tiến hành đọc file và bơm cookie Vip vào
-        java.util.List<org.openqa.selenium.Cookie> savedCookies = commons.CookieManager.loadCookiesFromFile();
-
-        // Nếu file trống trơn (lần đầu chạy), tự động gọi API Login để lấy cookies mới và lưu lại
-        if (savedCookies.isEmpty()) {
-            System.out.println("--> [INFO] Không tìm thấy file session cũ, tiến hành gọi API khởi tạo...");
-            api.services.AuthApiService apiService = new api.services.AuthApiService();
-            api.dtos.request.LoginRequestDTO requestData = 
+        // 2. Tiến hành gọi API Login lấy session xịn
+        System.out.println("--> [TRUY VẾT] Đang tiến hành gọi API Login...");
+        api.services.AuthApiService apiService = new api.services.AuthApiService();
+        api.dtos.request.LoginRequestDTO requestData =
                 new api.dtos.request.LoginRequestDTO("long_tester_pro@gmail.com", "123456");
-                
-            api.dtos.response.LoginResponseDTO responseData = apiService.executeLoginApi(requestData);
-            
-            // Lưu cookies thu được từ API vào file dữ liệu
-            commons.CookieManager.saveCookiesToFile(responseData.getCookies());
-            
-            // Đọc lại mảng cookies vừa lưu vào list
-            savedCookies = commons.CookieManager.loadCookiesFromFile();
+
+        api.dtos.response.LoginResponseDTO responseData = apiService.executeLoginApi(requestData);
+
+        System.out.println("--> [TRUY VẾT] Mã trạng thái API trả về: " + responseData.getStatusCode());
+
+        // 3. Bơm trực tiếp cookie từ API vào Selenium (Lọc trùng và ép Domain dấu chấm)
+        for (io.restassured.http.Cookie apiCookie : responseData.getCookies()) {
+
+            // 🌟 KHÓA CHÍ MẠNG 1: Chỉ lấy đúng con cookie tên là 'frontend' để đăng nhập
+            if (apiCookie.getName().equals("frontend")) {
+
+                // 🌟 KHÓA CHÍ MẠNG 2: Ép domain phải có dấu chấm phía trước (.live.techpanda.org) chuẩn Magento
+                org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie.Builder(apiCookie.getName(), apiCookie.getValue())
+                        .domain(".live.techpanda.org") // Thêm dấu chấm ở đây anh nhé
+                        .path("/")
+                        .isSecure(false)
+                        .build();
+
+                driver.manage().addCookie(seleniumCookie);
+                System.out.println("--> [TRUY VẾT] Đã tiêm thành công Cookie Đăng Nhập VIP vào máu Chrome!");
+            }
         }
 
-        // BƠM COOKIES VIP VÀO TRÌNH DUYỆT (Lúc này Chrome sẽ nhận 100% vì không còn cookie trùng tên cũ)
-        for (org.openqa.selenium.Cookie cookie : savedCookies) {
-            driver.manage().addCookie(cookie);
-        }
-
-        // REFRESH LÀM MỚI TRANG: Để trình duyệt gửi con Cookie Vip này lên bắt Server trả về giao diện Đã đăng nhập
-        driver.navigate().refresh();
+        // 4. Ép nhảy thẳng vào trang quản lý tài khoản để hưởng thành quả
+        driver.get("http://live.techpanda.org/index.php/customer/account/");
         System.out.println("=== [SUCCESS] TRÌNH DUYỆT ĐÃ ĐƯỢC AUTO LOGIN SẴN SÀNG KHỞI CHẠY TEST CASE ===");
     }
+
+
    // @After
     public void tearDown() {
         if (threadDriver.get() != null) {

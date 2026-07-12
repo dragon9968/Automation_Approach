@@ -19,28 +19,36 @@ public class AuthApiService {
 
         // Dùng Regex tìm chuỗi form_key trong đống HTML trả về
         String formKey = "";
-        Pattern pattern = Pattern.compile("name=\"form_key\" value=\"([^\"]+)\"");
-        Matcher matcher = pattern.matcher(htmlBody);
-        if (matcher.find()) {
-            formKey = matcher.group(1);
+        try {
+            org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(htmlBody);
+            // Tìm thẻ input có name là form_key nằm lẩn khuất trong trang
+            org.jsoup.nodes.Element formKeyElement = doc.select("input[name=form_key]").first();
+            if (formKeyElement != null) {
+                formKey = formKeyElement.attr("value");
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi khi bốc form_key bằng Jsoup: " + e.getMessage());
         }
 
-        // --- 2. Gửi request POST dạng Form để Đăng nhập hệ thống ---
-        Response postResponse = RestAssured.given()
-            // Tắt tự động chuyển hướng để giữ lại Cookies chuẩn mã 302
-            .redirects().follow(false)
-            .contentType("application/x-www-form-urlencoded; charset=UTF-8")
-            .cookie("frontend", initialCookie) 
-            .formParam("form_key", formKey)
-            .formParam("login[username]", requestDTO.getUsername())
-            .formParam("login[password]", requestDTO.getPassword())
-            .formParam("send", "")
-            .post("http://live.techpanda.org/index.php/customer/account/loginPost/");
+        System.out.println("--> [TRUY VẾT] Form Key lấy được bằng Jsoup là: [" + formKey + "]");
 
-        // --- 3. Đóng gói kết quả trả về vào hộp Response DTO ---
+        Response postResponse = RestAssured.given()
+                .redirects().follow(false)
+                .header("User-Agent", "AutomationBrowser")
+                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .cookie("frontend", initialCookie)
+                .formParam("form_key", formKey)
+                .formParam("login[username]", requestDTO.getUsername())
+                .formParam("login[password]", requestDTO.getPassword())
+                .formParam("send", "")
+                .post("http://live.techpanda.org/index.php/customer/account/loginPost/");
+
+        // 🌟 DÒNG KIỂM TRA 2: Xem Server thực chất đang điều hướng anh đi đâu (Dashboard hay trang Login lỗi)
+        System.out.println("--> [TRUY VẾT] Đường dẫn Redirect thực tế: " + postResponse.getHeader("Location"));
+
         return new LoginResponseDTO(
                 postResponse.getStatusCode(),
-                postResponse.getDetailedCookies() // 🌟 SỬA THÀNH HÀM NÀY: Để lấy cookie chi tiết (gồm cả Domain, Path)
-            );
+                postResponse.getDetailedCookies()
+        );
     }
 }
