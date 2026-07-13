@@ -1,6 +1,5 @@
 package stepDefinitions;
 
-import commons.BaseTest;
 import commons.PageGeneratorManager;
 import dtos.UserRegisterDTO;
 import hooks.CucumberHooks;

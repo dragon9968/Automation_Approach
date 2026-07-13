@@ -3,11 +3,9 @@ package api.services;
 import api.dtos.request.LoginRequestDTO;
 import api.dtos.response.LoginResponseDTO;
 import io.restassured.RestAssured;
-import io.restassured.config.RedirectConfig;
-import io.restassured.config.RestAssuredConfig;
 import io.restassured.response.Response;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 public class AuthApiService {
 
@@ -20,9 +18,9 @@ public class AuthApiService {
         // Dùng Regex tìm chuỗi form_key trong đống HTML trả về
         String formKey = "";
         try {
-            org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(htmlBody);
+            Document doc = org.jsoup.Jsoup.parse(htmlBody);
             // Tìm thẻ input có name là form_key nằm lẩn khuất trong trang
-            org.jsoup.nodes.Element formKeyElement = doc.select("input[name=form_key]").first();
+            Element formKeyElement = doc.select("input[name=form_key]").first();
             if (formKeyElement != null) {
                 formKey = formKeyElement.attr("value");
             }

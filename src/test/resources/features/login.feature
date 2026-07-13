@@ -11,10 +11,4 @@ Feature: TechPanda Account Login
       | email                     | password |
       | long_tester_pro@gmail.com | 123456   |
     And the user clicks the Login button
-
-    
-    Scenario: Login successfully via API inside browser
-    When the user performs login action via API with the following credentials:
-      | email                     | password |
-      | long_tester_pro@gmail.com | 123456   |
-    Then the user should be redirected to the Dashboard page
+    Then the user verifies page title is "My Account", URL contains "customer/account" and welcome message contains "Long Dinh Nguyen"

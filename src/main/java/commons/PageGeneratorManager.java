@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 
 
 import pageObjects.UserRegisterPageObject_Techpanda;
+import pageObjects.DashBoardPageObject_Techpanda;
 import pageObjects.MobilePageObject_Techpanda;
 import pageObjects.UserHomePageObject_Techpanda;
 import pageObjects.UserLoginPageObject_Techpanda;
@@ -26,4 +27,8 @@ public class PageGeneratorManager {
 	public static MobilePageObject_Techpanda getMobilePageTechPanda(WebDriver driver) {
 		return new MobilePageObject_Techpanda(driver);
 	}
+	
+	public static DashBoardPageObject_Techpanda getDashBoardPageObject_Techpanda(WebDriver driver) {
+        return new DashBoardPageObject_Techpanda(driver);
+    }
 }

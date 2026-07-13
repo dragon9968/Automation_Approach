@@ -6,7 +6,7 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
     features = "src/test/resources/features",// Đường dẫn tới thư mục chứa file .feature
     glue = {"stepDefinitions", "hooks"},// Nơi chứa code xử lý step và hooks
-    tags = "@mobile",
+    tags = "@login",
     plugin = {
         "pretty",
         "html:target/cucumber-report.html",

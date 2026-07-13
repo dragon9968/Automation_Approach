@@ -12,7 +12,6 @@ public class UserLoginPageObject_Techpanda extends BasePage {
 		this.driver = driver;
 	}
 	
-	
 //Có return class object để apply cho Page_Generator 2,3
 	public UserHomePageObject_Techpanda clickToLoginButton() {
 		waitForElementClickable(driver, LoginPageUI_Techpanda.LOGIN_BUTTON);
