@@ -1,43 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
+<testng-results ignored="0" total="1" passed="0" failed="1" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-07-10T16:43:35 ICT" name="Default suite" finished-at="2026-07-10T16:47:14 ICT" duration-ms="218264">
+  <suite started-at="2026-07-14T11:47:07 ICT" name="Default suite" finished-at="2026-07-14T11:47:49 ICT" duration-ms="42256">
     <groups>
       <group name="cucumber">
-        <method signature="AbstractTestNGCucumberTests.runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:runners.TestRunner@78830d9a]" name="runScenario" class="io.cucumber.testng.AbstractTestNGCucumberTests"/>
+        <method signature="AbstractTestNGCucumberTests.runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:runners.TestRunner@7772054c]" name="runScenario" class="io.cucumber.testng.AbstractTestNGCucumberTests"/>
       </group> <!-- cucumber -->
     </groups>
-    <test started-at="2026-07-10T16:43:35 ICT" name="Default test" finished-at="2026-07-10T16:47:14 ICT" duration-ms="218264">
+    <test started-at="2026-07-14T11:47:07 ICT" name="Default test" finished-at="2026-07-14T11:47:49 ICT" duration-ms="42256">
       <class name="runners.TestRunner">
-        <test-method is-config="true" signature="setUpClass(org.testng.ITestContext)[pri:0, instance:runners.TestRunner@78830d9a]" started-at="2026-07-10T16:43:35 ICT" name="setUpClass" finished-at="2026-07-10T16:43:38 ICT" duration-ms="2549" status="PASS">
+        <test-method is-config="true" signature="setUpClass(org.testng.ITestContext)[pri:0, instance:runners.TestRunner@7772054c]" started-at="2026-07-14T11:47:07 ICT" name="setUpClass" finished-at="2026-07-14T11:47:16 ICT" duration-ms="8842" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[org.testng.TestRunner@17e7cc67]]>
+                <![CDATA[org.testng.TestRunner@4d37c996]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpClass -->
-        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:runners.TestRunner@78830d9a]" started-at="2026-07-10T16:43:38 ICT" name="runScenario" description="Runs Cucumber Scenarios" data-provider="scenarios" finished-at="2026-07-10T16:47:13 ICT" duration-ms="215432" status="PASS">
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:runners.TestRunner@7772054c]" started-at="2026-07-14T11:47:16 ICT" name="runScenario" description="Runs Cucumber Scenarios" data-provider="scenarios" finished-at="2026-07-14T11:47:47 ICT" duration-ms="30825" status="FAIL">
           <params>
             <param index="0">
               <value>
-                <![CDATA["Verify that cost of product in list page and details page are equal"]]>
+                <![CDATA["Login successfully with valid credentials"]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA["Mobile Product Feature"]]>
+                <![CDATA["TechPanda Account Login"]]>
               </value>
             </param>
           </params>
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[🚨 Lỗi: Không tìm thấy tên chào mừng! expected [true] but found [false]]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: 🚨 Lỗi: Không tìm thấy tên chào mừng! expected [true] but found [false]
+at org.testng.Assert.fail(Assert.java:111)
+at org.testng.Assert.failNotEquals(Assert.java:1578)
+at org.testng.Assert.assertTrue(Assert.java:57)
+at stepDefinitions.LoginSteps.verifyDashboardDetails(LoginSteps.java:46)
+at ✽.the user verifies page title is "My Account", URL contains "customer/account" and welcome message contains "Long  Nguyen"(file:///D:/Automation%20FC/01%20-%20Software/eclipse-java-2025-12-R-win32-x86_64/Automation_Approach/src/test/resources/features/login.feature:14)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
           <reporter-output>
           </reporter-output>
         </test-method> <!-- runScenario -->
-        <test-method is-config="true" signature="tearDownClass()[pri:0, instance:runners.TestRunner@78830d9a]" started-at="2026-07-10T16:47:13 ICT" name="tearDownClass" finished-at="2026-07-10T16:47:14 ICT" duration-ms="99" status="PASS">
+        <test-method is-config="true" signature="tearDownClass()[pri:0, instance:runners.TestRunner@7772054c]" started-at="2026-07-14T11:47:47 ICT" name="tearDownClass" finished-at="2026-07-14T11:47:49 ICT" duration-ms="2164" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDownClass -->

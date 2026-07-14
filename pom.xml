@@ -48,11 +48,18 @@
            <version>5.5.0</version>
         </dependency>
 
-        <!-- Thêm thư viện này vào pom.xml -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.17.2</version>
+        </dependency>
+        
+        <!-- Thư viện tự động xuất Extent Report v5 cho Cucumber 7 -->
+        <dependency>
+            <groupId>tech.grasshopper</groupId>
+            <artifactId>extentreports-cucumber7-adapter</artifactId>
+            <version>1.14.0</version>
+            <scope>test</scope>
         </dependency>
         
         <!-- TestNG -->

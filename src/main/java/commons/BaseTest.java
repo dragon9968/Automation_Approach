@@ -45,6 +45,8 @@ public class BaseTest {
             options.addPreference("security.insecure_field_warning.contextual.enabled", false);
             options.addPreference("dom.security.https_only_mode", false);
             options.addArguments("--user-agent=AutomationBrowser");	
+            //options.addArguments("-headless"); 
+            //options.addArguments("--window-size=1920,1080");
 			driverBaseTest = new FirefoxDriver();
 			
 		} else if(browserName.equalsIgnoreCase("chrome")) {
@@ -57,6 +59,8 @@ public class BaseTest {
             options.addArguments("--unsafely-treat-insecure-origin-as-secure=http://live.techpanda.org");
             options.addArguments("--user-data-dir=" + System.getProperty("java.io.tmpdir") + "chrome_automation_profile" + System.currentTimeMillis());
             options.addArguments("--user-agent=AutomationBrowser");	
+           // options.addArguments("--headless=new");
+           // options.addArguments("--window-size=1920,1080");
 			driverBaseTest = new ChromeDriver(options);
 			
 		} else if(browserName.equalsIgnoreCase("edge")) {

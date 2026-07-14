@@ -20,6 +20,36 @@ public class RegisterSteps{
     public void theUserIsOnTheTechPandaHomepage() {
     	System.out.println("=== Background: User is on Homepage ===");
     }
+    
+    @When("User input firstname {string}")
+    public void inputFirstname(String value) {
+        registerPage.inputToFirstnameTextbox(value);
+    }
+
+    @When("User input lastname {string}")
+    public void inputLastname(String value) {
+        registerPage.inputToLastnameTextbox(value);
+    }
+
+    @When("User input email {string}")
+    public void inputEmail(String value) {
+        registerPage.inputToEmailTextbox(value);
+    }
+
+    @When("User input password {string}")
+    public void inputPassword(String value) {
+        registerPage.inputToPasswordTextbox(value);
+    }
+
+    @When("User input confirm password {string}")
+    public void inputConfirmPassword(String value) {
+        registerPage.inputToConfirmPasswordTextbox(value);
+    }
+
+    @When("User input existing email {string}")
+    public void inputExistingEmail(String value) {
+        registerPage.inputToEmailTextbox(value);
+    }
 
     @When("the user navigates to the Registration page")
     public void theUserNavigatesToTheRegistrationPage() {
@@ -37,7 +67,10 @@ public class RegisterSteps{
             emailAddress = "longnguyen" + new Random().nextInt(99999) + "@gmail.com";
         }
         registerPage.inputToFirstnameTextbox(registerData.getFirstName());
-        registerPage.inputToMiddlenameTextbox(registerData.getMiddleName());
+        String middleName = registerData.getMiddleName();
+        if (middleName != null && !middleName.trim().isEmpty()) {
+            registerPage.inputToMiddlenameTextbox(middleName);
+        }
         registerPage.inputToLastnameTextbox(registerData.getLastName());
         registerPage.inputToEmailTextbox(emailAddress);
         registerPage.inputToPasswordTextbox(registerData.getPassword());
@@ -52,6 +85,51 @@ public class RegisterSteps{
     @And("the user clicks the Register button")
     public void theUserClicksTheRegisterButton() {
         registerPage.clickToRegisterButton();
+        registerPage.sleepInSecond(2);
+    }
+    
+    // ===== VERIFY =====
+
+    @Then("Firstname error message is displayed {string}")
+    public void verifyFirstnameError(String msg) {
+        Assert.assertEquals(registerPage.getErrorMessageAtFirstnameTextbox(), msg);
+    }
+
+    @Then("Lastname error message is displayed {string}")
+    public void verifyLastnameError(String msg) {
+        Assert.assertEquals(registerPage.getErrorMessageAtLastnameTextbox(), msg);
+    }
+
+    @Then("Email error message is displayed {string}")
+    public void verifyEmailError(String msg) {
+        // Nếu là case để trống (Hiện lỗi Required của Magento)
+        if (msg.contains("required field")) {
+            Assert.assertEquals(registerPage.getErrorMessageAtEmailTextbox(), msg);
+        } 
+        // Nếu là case nhập sai cú pháp email (Hiện bong bóng lỗi HTML5 của Chrome)
+        else {
+            Assert.assertEquals(registerPage.getHTML5EmailValidationMessage(), msg);
+        }
+    }
+    
+    @Then("Existing email error message is displayed {string}")
+    public void verifyExistingEmail(String msg) {
+        Assert.assertTrue(registerPage.getErrorExistingEmailMessage().contains(msg));
+    }
+
+    @Then("Password error message is displayed {string}")
+    public void verifyEmptyPasswordError(String msg) {
+        Assert.assertEquals(registerPage.getErrorMessageAtPasswordTextbox(), msg);
+    }
+    
+    @Then("Confirm Password error message is displayed {string}")
+    public void verifyEmptyConfirmPasswordError(String msg) {
+        Assert.assertEquals(registerPage.getErrorMessageAtConfirmPasswordTextbox(), msg);
+    }
+    
+    @Then("Confirm Password error message not match is displayed {string}")
+    public void verifyConfirmPasswordNotMatchError(String msg) {
+        Assert.assertEquals(registerPage.getErrorMessageNotMatchAtConfirmPasswordTextbox(), msg);
     }
 
     @Then("the system displays a password error message: {string}")

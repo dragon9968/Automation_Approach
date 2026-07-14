@@ -8,6 +8,9 @@ import api.services.AuthApiService;
 import api.dtos.request.LoginRequestDTO;
 import api.dtos.response.LoginResponseDTO;
 import org.openqa.selenium.Cookie; // Chỉ import duy nhất Cookie của Selenium thôi anh nhé
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import io.cucumber.java.Scenario;
 
 // Cho kế thừa BaseTest để xài lại hàm khởi tạo Browser của anh
 public class CucumberHooks extends BaseTest {
@@ -51,9 +54,14 @@ public class CucumberHooks extends BaseTest {
         driver.get("http://live.techpanda.org/index.php/customer/account/");
         System.out.println("=== [SUCCESS] TRÌNH DUYỆT ĐÃ ĐƯỢC AUTO LOGIN SẴN SÀNG KHỞI CHẠY TEST CASE ===");
     }
-    
-   // @After
-    public void tearDown() {
+    @After 
+    public void tearDown(Scenario scenario) { 
+        if (scenario.isFailed()) {
+            byte[] screenshot = ((TakesScreenshot) threadDriver.get())
+                                .getScreenshotAs(OutputType.BYTES);
+            scenario.attach(screenshot, "image/png", "📸 ẢNH CHỤP MÀN HÌNH LÚC BỊ LỖI");
+        }
+        
         if (threadDriver.get() != null) {
             threadDriver.get().quit();
             threadDriver.remove();

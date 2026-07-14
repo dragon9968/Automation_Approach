@@ -39,6 +39,11 @@ public class UserRegisterPageObject_Techpanda extends BasePage{
 		return getElementText(driver, RegisterPageUI_Techpanda.EMAIL_ERROR_MESSAGE);
 	}
 	
+	public String getHTML5EmailValidationMessage() {
+        waitForElementVisible(driver, RegisterPageUI_Techpanda.EMAIL_TEXTBOX);
+		return getElementValidationMessage(driver, RegisterPageUI_Techpanda.EMAIL_TEXTBOX);
+	}
+	
 	public String getInvalidMessageAtEmailTextbox() {
         waitForElementVisible(driver, RegisterPageUI_Techpanda.EMAIL_TEXTBOX);
 		return getElementValidationMessage(driver, RegisterPageUI_Techpanda.EMAIL_TEXTBOX);
@@ -58,6 +63,11 @@ public class UserRegisterPageObject_Techpanda extends BasePage{
 		return getElementText(driver, RegisterPageUI_Techpanda.CONFIRM_PASSWORD_ERROR_MESSAGE);
 	}
 
+	public String getErrorMessageNotMatchAtConfirmPasswordTextbox() {
+        waitForElementVisible(driver, RegisterPageUI_Techpanda.CONFIRM_PASSWORD_NOT_MATCH_ERROR_MESSAGE);
+		return getElementText(driver, RegisterPageUI_Techpanda.CONFIRM_PASSWORD_NOT_MATCH_ERROR_MESSAGE);
+	}
+	
 	@Step("Input to First Name textbox with value is {0}")
 	public void inputToFirstnameTextbox(String firstName) {
 		waitForElementVisible(driver, RegisterPageUI_Techpanda.FIRST_NAME_TEXTBOX);
@@ -100,7 +110,6 @@ public class UserRegisterPageObject_Techpanda extends BasePage{
 		clickToElement(driver, RegisterPageUI_Techpanda.SUBCRIBED_CHECKBOX);			
 	}
 
-	
 	
 	@Step("Verify Register success message is displayed")
 	public String getRegisterSuccessMessage() {

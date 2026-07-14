@@ -16,7 +16,10 @@ public class RegisterPageUI_Techpanda {
 	public static final String EMAIL_ERROR_MESSAGE = "css=#advice-required-entry-email_address";
 	public static final String PASSWORD_ERROR_MESSAGE = "css=#advice-required-entry-password";
 	public static final String PASSWORD_ERROR_MESSAGE_LESS_THAN_6 = "css=#advice-validate-password-password";
+	
 	public static final String CONFIRM_PASSWORD_ERROR_MESSAGE = "css=#advice-required-entry-confirmation";
+	public static final String CONFIRM_PASSWORD_NOT_MATCH_ERROR_MESSAGE = "css=#advice-validate-cpassword-confirmation";
+
 	public static final String REGISTER_SUCCESS_MESSAGE = "css=.success-msg";
 	public static final String EXISTING_EMAIL_ERROR_MESSAGE = "css=li.error-msg";
 
