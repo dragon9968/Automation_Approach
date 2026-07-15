@@ -1,0 +1,15 @@
+-- 1. Xóa bảng cũ nếu lỡ có trước đó cho sạch máy
+DROP TABLE IF EXISTS users_test;
+
+-- 2. Tạo bảng mới tinh đúng 3 cột theo yêu cầu của anh
+CREATE TABLE users_test (
+                            email VARCHAR(100) PRIMARY KEY, -- Email làm khóa chính, không được trùng
+                            pass VARCHAR(100) NOT NULL,     -- Mật khẩu
+                            status VARCHAR(20) DEFAULT 'active' -- Trạng thái (mặc định là active)
+);
+
+-- 3. Chèn thử một dòng dữ liệu mẫu để lát mình test SELECT
+INSERT INTO users_test (email, pass, status)
+VALUES ('admin@gmail.com', 'admin123', 'active');
+
+SELECT * from users_test

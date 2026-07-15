@@ -61,6 +61,13 @@
             <version>1.14.0</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- PostgreSQL JDBC Driver - Giữ nguyên em này trong pom.xml nha anh -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.2</version>
+        </dependency>
         
         <!-- TestNG -->
         <dependency>
