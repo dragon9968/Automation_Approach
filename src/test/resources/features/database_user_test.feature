@@ -10,14 +10,14 @@ Feature: PostgreSQL Database Practice with 3-Column Table
 
     When I insert a new user with details:
       | email               | pass    | status |
-      | test_user@gmail.com | pass123 | active |
+      | test_user1@gmail.com | pass123 | active |
 
     # 3. SELECT
     #Then I verify user with email "test_user@gmail.com" has password "pass123" in the database
 
     Then I verify user exists with details:
       | email               | pass    | status |
-      | test_user@gmail.com | pass123 | active |
+      | test_user1@gmail.com | pass123 | active |
     # 4. UPDATE
     When I update status of user with email "test_user@gmail.com" to "inactive"
     Then I verify status of user with email "test_user@gmail.com" is "inactive" in the database
