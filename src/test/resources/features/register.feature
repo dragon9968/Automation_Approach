@@ -4,21 +4,21 @@ Feature: TechPanda Account Registration
   Background:
     Given the user is on the TechPanda homepage
     When the user navigates to the Registration page
-
+  @empty_data
   Scenario: Register with empty data
     When the user clicks the Register button
     Then Firstname error message is displayed "This is a required field."
-    And Lastname error message is displayed "This is a required field."
+    And Lastname error message is displayed "This is a required field"
     And Email error message is displayed "This is a required field."
     And Password error message is displayed "This is a required field."
     And Confirm Password error message is displayed "This is a required field."
-
+  @invalid_email
   Scenario: Register with invalid email
     When the user enters the following registration details:
       | firstName | middleName | lastName | email    | password | confirmPassword |
       | Long      |            | Nguyen   | longmail | 123456   | 123456          |
     And the user clicks the Register button
-    Then Email error message is displayed "Please include an '@' in the email address. 'longmail' is missing an '@'."
+    Then Email error message is displayed "Please include an '@' in the email address. 'longmail' is missisng an '@'."
 
   Scenario: Register with existing email
     When the user enters the following registration details:

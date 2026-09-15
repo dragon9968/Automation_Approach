@@ -16,7 +16,7 @@ import io.cucumber.java.Scenario;
 public class CucumberHooks extends BaseTest {
     
     private static final ThreadLocal<WebDriver> threadDriver = new ThreadLocal<>();
-   /* @Before(order = 1)
+    @Before(order = 1)
     public void setUp() {
         if (threadDriver.get() == null) {
             WebDriver driver = getBrowserName("chrome"); 
@@ -67,7 +67,7 @@ public class CucumberHooks extends BaseTest {
             threadDriver.remove();
         }
     }
-*/
+
     public static WebDriver getDriver() {
         return threadDriver.get();
     }
