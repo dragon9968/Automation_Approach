@@ -12,10 +12,9 @@ import java.util.List;
 import java.util.Random;
 
 public class RegisterSteps{
-     WebDriver driver= CucumberHooks.getDriver();
      UserHomePageObject_Techpanda homePage;
      UserRegisterPageObject_Techpanda registerPage;
-     
+
     @Given("the user is on the TechPanda homepage")
     public void theUserIsOnTheTechPandaHomepage() {
     	System.out.println("=== Background: User is on Homepage ===");
@@ -53,7 +52,8 @@ public class RegisterSteps{
 
     @When("the user navigates to the Registration page")
     public void theUserNavigatesToTheRegistrationPage() {
-    	homePage = PageGeneratorManager.getHomePageTechPanda(driver); 
+        WebDriver driver= CucumberHooks.getDriver();
+        homePage = PageGeneratorManager.getHomePageTechPanda(driver);
         homePage.openRegisterPage();
         registerPage = PageGeneratorManager.getRegisterPageTechPanda(driver);
     }
@@ -67,6 +67,7 @@ public class RegisterSteps{
             emailAddress = "longnguyen" + new Random().nextInt(99999) + "@gmail.com";
         }
         registerPage.inputToFirstnameTextbox(registerData.getFirstName());
+
         String middleName = registerData.getMiddleName();
         if (middleName != null && !middleName.trim().isEmpty()) {
             registerPage.inputToMiddlenameTextbox(middleName);

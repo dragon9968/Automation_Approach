@@ -17,7 +17,7 @@
         <maven.compiler.source>21</maven.compiler.source>
 
         <!-- Global variable for dependencies -->
-        <webdriver.version>4.16.1</webdriver.version>
+        <webdriver.version>4.25.0</webdriver.version>
         <testng.version>7.8.0</testng.version>
         <jackson.version>2.10.0</jackson.version>
         <aspectj.version>1.9.21</aspectj.version>
@@ -222,12 +222,22 @@
                    <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/runTest.xml</suiteXmlFile>
                     </suiteXmlFiles>-->
-                    
-                     <!-- Run Cucumber -->
+                    <!-- Run Cucumber -->
                     <includes>
                     <include>**/TestRunner.java</include>
-                   </includes> 
+                   </includes>
 
+                    <!-- Run Parallel -->
+                    <properties>
+                        <property>
+                            <name>parallel</name>
+                            <value>methods</value> <!-- Can also be 'classes' or 'both' depending on your setup -->
+                        </property>
+                        <property>
+                            <name>dataproviderthreadcount</name>
+                            <value>2</value> <!-- Set your desired thread count here -->
+                        </property>
+                    </properties>
                     <!-- Argument -->
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"

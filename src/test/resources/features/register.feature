@@ -4,7 +4,7 @@ Feature: TechPanda Account Registration
   Background:
     Given the user is on the TechPanda homepage
     When the user navigates to the Registration page
-  @empty_data
+  #@empty_data
   Scenario: Register with empty data
     When the user clicks the Register button
     Then Firstname error message is displayed "This is a required field."
@@ -12,7 +12,7 @@ Feature: TechPanda Account Registration
     And Email error message is displayed "This is a required field."
     And Password error message is displayed "This is a required field."
     And Confirm Password error message is displayed "This is a required field."
-  @invalid_email
+  #@invalid_email
   Scenario: Register with invalid email
     When the user enters the following registration details:
       | firstName | middleName | lastName | email    | password | confirmPassword |
