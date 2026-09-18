@@ -348,12 +348,18 @@ public class BasePage {
 	public void overrideImplicitTimeout(WebDriver driver , long timeOut) {
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(timeOut));
 	}
-	
-	
-	
-	public boolean isElementDisplayed(WebDriver driver, String locatorType) {
-			return getWebElement(driver, locatorType).isDisplayed();
 
+
+
+	public boolean isElementDisplayed(WebDriver driver, String locator) {
+		try {
+			return getWebElement(driver, locator).isDisplayed();
+		} catch (NoSuchElementException e) {
+			// Nếu không tìm thấy element trong HTML thì trả về false chứ không quăng exception
+			return false;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 	
 	public boolean isElementUndisplayed(WebDriver driver, String locatorType) {

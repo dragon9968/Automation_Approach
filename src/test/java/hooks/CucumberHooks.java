@@ -4,22 +4,28 @@ import commons.BaseTest;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import org.openqa.selenium.WebDriver;
-import api.services.AuthApiService;
-import api.dtos.request.LoginRequestDTO;
-import api.dtos.response.LoginResponseDTO;
-import org.openqa.selenium.Cookie; // Chỉ import duy nhất Cookie của Selenium thôi anh nhé
+
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import io.cucumber.java.Scenario;
+import api.helpers.SessionManager;
+import commons.GlobalConstants;
 
 // Cho kế thừa BaseTest để xài lại hàm khởi tạo Browser của anh
 public class CucumberHooks extends BaseTest {
     
     private static final ThreadLocal<WebDriver> threadDriver = new ThreadLocal<>();
-    @Before(order = 1)
+
+    /*@Before(order = 1)
     public void setUp() {
         if (threadDriver.get() == null) {
-            WebDriver driver = getBrowserName("chrome"); 
+            // 🌟 Lấy giá trị 'browser' truyền từ lệnh terminal, nếu không truyền thì mặc định lấy 'chrome'
+            String browserName = System.getProperty("browser");
+            if (browserName == null || browserName.isEmpty()) {
+                browserName = "chrome";
+            }
+
+            WebDriver driver = getBrowserName(browserName);
             threadDriver.set(driver);
         }
     }
@@ -27,46 +33,27 @@ public class CucumberHooks extends BaseTest {
     @Before(value = "@use_session", order = 2)
     public void handleAutoLoginSession() {
         WebDriver driver = threadDriver.get();
-        // 1. Xóa sạch bách mọi cookie khách vãng lai của Chrome trước
-        driver.manage().deleteAllCookies();
-        // 2. Tiến hành gọi API Login lấy session xịn
-        System.out.println("--> [TRUY VẾT] Đang tiến hành gọi API Login...");
-        AuthApiService apiService = new AuthApiService();
-        LoginRequestDTO requestData = new LoginRequestDTO("long_tester_pro@gmail.com", "123456");
-        LoginResponseDTO responseData = apiService.executeLoginApi(requestData);
-        System.out.println("--> [TRUY VẾT] Mã trạng thái API trả về: " + responseData.getStatusCode());
-        // 3. Bơm trực tiếp cookie từ API vào Selenium (Lọc trùng và ép Domain dấu chấm)
-        for (io.restassured.http.Cookie apiCookie : responseData.getCookies()) {
-            // 🌟 KHÓA CHÍ MẠNG 1: Chỉ lấy đúng con cookie tên là 'frontend' để đăng nhập
-            if (apiCookie.getName().equals("frontend")) {
-                // 🌟 KHÓA CHÍ MẠNG 2: Ép domain phải có dấu chấm phía trước (.live.techpanda.org) chuẩn Magento
-                Cookie seleniumCookie = new Cookie.Builder(apiCookie.getName(), apiCookie.getValue())
-                        .domain(".live.techpanda.org") // Thêm dấu chấm ở đây anh nhé
-                        .path("/")
-                        .isSecure(false)
-                        .build();
-
-                driver.manage().addCookie(seleniumCookie);
-                System.out.println("--> [TRUY VẾT] Đã tiêm thành công Cookie Đăng Nhập VIP vào máu Chrome!");
-            }
-        }
-        // 4. Ép nhảy thẳng vào trang quản lý tài khoản để hưởng thành quả
-        driver.get("http://live.techpanda.org/index.php/customer/account/");
-        System.out.println("=== [SUCCESS] TRÌNH DUYỆT ĐÃ ĐƯỢC AUTO LOGIN SẴN SÀNG KHỞI CHẠY TEST CASE ===");
+        // 🌟 Sử dụng account mặc định khai báo tập trung
+        SessionManager.injectLoginSession(
+                driver,
+                GlobalConstants.TECHPANDA_DEFAULT_USER,
+                GlobalConstants.TECHPANDA_DEFAULT_PASSWORD
+        );
     }
-    @After 
-    public void tearDown(Scenario scenario) { 
+
+    @After
+    public void tearDown(Scenario scenario) {
         if (scenario.isFailed()) {
             byte[] screenshot = ((TakesScreenshot) threadDriver.get())
                                 .getScreenshotAs(OutputType.BYTES);
             scenario.attach(screenshot, "image/png", "📸 ẢNH CHỤP MÀN HÌNH LÚC BỊ LỖI");
         }
-        
+
         if (threadDriver.get() != null) {
             threadDriver.get().quit();
             threadDriver.remove();
         }
-    }
+    }*/
 
     public static WebDriver getDriver() {
         return threadDriver.get();

@@ -12,6 +12,17 @@ Feature: TechPanda Account Registration
     And Email error message is displayed "This is a required field."
     And Password error message is displayed "This is a required field."
     And Confirm Password error message is displayed "This is a required field."
+
+  #Dùng cách này giúp lượt bỏ nhiều @Then trong step definition.
+  @empty_data1
+  Scenario: Register with empty data (more optimized)
+    When the user clicks the Register button
+    Then the error message "This is a required field." is displayed at "firstName"
+    And the error message "This is a required field." is displayed at "lastName"
+    And the error message "This is a required field." is displayed at "email"
+    And the error message "This is a required field." is displayed at "password"
+    And the error message "This is a required field." is displayed at "confirmPassword"
+
   @invalid_email
   Scenario: Register with invalid email
     When the user enters the following registration details:
@@ -49,3 +60,18 @@ Feature: TechPanda Account Registration
     And the user clicks the Register button
     Then the system displays a registration success message: "Thank you for registering with Main Website Store."
     And the user logs out of the system
+
+  @register_validation
+  Scenario Outline: Register validation errors
+    When the user enters the following registration details:
+      | firstName   | middleName   | lastName   | email   | password   | confirmPassword   |
+      | <firstName> | <middleName> | <lastName> | <email> | <password> | <confirmPassword> |
+    And the user clicks the Register button
+    Then the validation error message "<expectedError>" should be displayed
+
+    Examples:
+      | firstName | middleName | lastName | email                     | password | confirmPassword | expectedError                                                          |
+      | Long      |            | Nguyen   | longmail                  | 123456   | 123456          | Please include an '@' in the email address.                            |
+      | Long      | Dinh       | Nguyen   | long_tester_pro@gmail.com | 123456   | 123456          | There is already an account                                             |
+      | Long      | Dinh       | Nguyen   | random_email              | 123456   | 123457          | Please make sure your passwords match.                                 |
+      | long      | dinh       | nguyen   | random_email              | 123      | 123             | Please enter 6 or more characters without leading or trailing spaces. |

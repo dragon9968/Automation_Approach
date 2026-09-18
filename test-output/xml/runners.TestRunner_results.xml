@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Run on Firefox"
+           tests="1"
+           failures="0"
+           errors="0"
+           skipped="0"
+           time="78.522">
+  <properties />
+  
+  
+            <testcase name="runScenario" time="78.522" classname="runners.TestRunner" />
+      
+</testsuite>

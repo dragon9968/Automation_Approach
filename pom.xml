@@ -226,7 +226,15 @@
                      <!-- Run Cucumber -->
                     <includes>
                     <include>**/TestRunner.java</include>
-                   </includes> 
+                   </includes>
+
+                    <!-- Run Parallel (chỉ có tác dụng khi chạy bằng mvn)-->
+                    <properties>
+                        <property>
+                            <name>dataproviderthreadcount</name>
+                            <value>1</value>
+                        </property>
+                    </properties>
 
                     <!-- Argument -->
                     <argLine>

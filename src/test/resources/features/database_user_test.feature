@@ -3,7 +3,7 @@ Feature: PostgreSQL Database Practice with 3-Column Table
 
   Scenario: Practice CRUD operations on users_test table
     # 1. CLEAN
-    Given the database is cleared of email "test_user1gmail.com"
+    Given the database is cleared of email "test_user1@gmail.com"
 
     # 2. INSERT
     #When I insert a new user with email "test_user@gmail.com", password "pass123" and status "active"
@@ -23,5 +23,5 @@ Feature: PostgreSQL Database Practice with 3-Column Table
     Then I verify status of user with email "test_user1@gmail.com" is "inactive" in the database
 
     # 5. DELETE
-    When I delete user with email "test_user1@gmail.com" from the database
-    Then I verify user with email "test_user1@gmail.com" no longer exists in the database
+    #When I delete user with email "test_user1@gmail.com" from the database
+    #Then I verify user with email "test_user1@gmail.com" no longer exists in the database

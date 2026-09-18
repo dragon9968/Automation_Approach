@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 public class RegisterSteps{
-     WebDriver driver= CucumberHooks.getDriver();
+     WebDriver driver;
      UserHomePageObject_Techpanda homePage;
      UserRegisterPageObject_Techpanda registerPage;
      
@@ -53,6 +53,7 @@ public class RegisterSteps{
 
     @When("the user navigates to the Registration page")
     public void theUserNavigatesToTheRegistrationPage() {
+        driver = CucumberHooks.getDriver();
     	homePage = PageGeneratorManager.getHomePageTechPanda(driver); 
         homePage.openRegisterPage();
         registerPage = PageGeneratorManager.getRegisterPageTechPanda(driver);
@@ -151,6 +152,37 @@ public class RegisterSteps{
     @And("the user logs out of the system")
     public void theUserLogsOutOfTheSystem() {
         registerPage.clickToLogoutLink();
+    }
+
+    //Use for Scenario: Register with empty data (more optimized)
+    @Then("the error message {string} is displayed at {string}")
+    public void verifyFieldErrorMessage(String expectedMsg, String fieldName) {
+        switch (fieldName) {
+            case "firstName":
+                Assert.assertEquals(registerPage.getErrorMessageAtFirstnameTextbox(), expectedMsg);
+                break;
+            case "lastName":
+                Assert.assertEquals(registerPage.getErrorMessageAtLastnameTextbox(), expectedMsg);
+                break;
+            case "email":
+                Assert.assertEquals(registerPage.getErrorMessageAtEmailTextbox(), expectedMsg);
+                break;
+            case "password":
+                Assert.assertEquals(registerPage.getErrorMessageAtPasswordTextbox(), expectedMsg);
+                break;
+            case "confirmPassword":
+                Assert.assertEquals(registerPage.getErrorMessageAtConfirmPasswordTextbox(), expectedMsg);
+                break;
+            default:
+                throw new IllegalArgumentException("Field Name is invalid: " + fieldName);
+        }
+    }
+
+    @Then("the validation error message {string} should be displayed")
+    public void verifyValidationErrorMessage(String expectedError) {
+        String actualError = registerPage.getRegisterErrorMessage();
+        Assert.assertTrue(actualError.contains(expectedError),
+                "Lỗi không khớp! \nExpected chứa: " + expectedError + "\nActual: " + actualError);
     }
 
 }

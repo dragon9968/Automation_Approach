@@ -6,14 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class DatabaseHelper {
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
-    private static final String USER = "postgres";
-    private static final String PASS = "123456"; // <-- Mật khẩu Postgres của anh
-
-    // Hàm lấy Connection
+    // Hàm lấy connection
     public static Connection getConnection() {
         try {
-            return DriverManager.getConnection(DB_URL, USER, PASS);
+            return DriverManager.getConnection(
+                    GlobalConstants.DB_POSTGRES_URL,
+                    GlobalConstants.DB_POSTGRES_USER,
+                    GlobalConstants.DB_POSTGRES_PASS
+            );
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("❌ Không thể kết nối tới PostgreSQL!");

@@ -130,6 +130,41 @@ public class UserRegisterPageObject_Techpanda extends BasePage{
 		return getElementText(driver, RegisterPageUI_Techpanda.EXISTING_EMAIL_ERROR_MESSAGE);
 	}
 
-	
+	// 🌟 HÀM DÙNG CHUNG CHO SCENARIO OUTLINE: Tự động quét và lấy câu lỗi đang hiển thị
+	public String getRegisterErrorMessage() {
+		// 1. Kiểm tra lỗi Banner tổng (Ví dụ: Email đã tồn tại)
+		if (isElementDisplayed(driver, RegisterPageUI_Techpanda.EXISTING_EMAIL_ERROR_MESSAGE)) {
+			return getElementText(driver, RegisterPageUI_Techpanda.EXISTING_EMAIL_ERROR_MESSAGE);
+		}
+
+		// 2. Kiểm tra lỗi bong bóng HTML5 của Chrome (Ví dụ: Nhập thiếu dấu @)
+		String html5Msg = getElementValidationMessage(driver, RegisterPageUI_Techpanda.EMAIL_TEXTBOX);
+		if (html5Msg != null && !html5Msg.isEmpty()) {
+			return html5Msg;
+		}
+
+		// 3. Kiểm tra lỗi Password ngắn (< 6 ký tự)
+		if (isElementDisplayed(driver, RegisterPageUI_Techpanda.PASSWORD_ERROR_MESSAGE_LESS_THAN_6)) {
+			return getElementText(driver, RegisterPageUI_Techpanda.PASSWORD_ERROR_MESSAGE_LESS_THAN_6);
+		}
+
+		// 4. Kiểm tra lỗi Confirm Password không khớp
+		if (isElementDisplayed(driver, RegisterPageUI_Techpanda.CONFIRM_PASSWORD_NOT_MATCH_ERROR_MESSAGE)) {
+			return getElementText(driver, RegisterPageUI_Techpanda.CONFIRM_PASSWORD_NOT_MATCH_ERROR_MESSAGE);
+		}
+
+		// 5. Kiểm tra lỗi tại các ô Input thông thường (Email/Pass/ConfirmPass)
+		if (isElementDisplayed(driver, RegisterPageUI_Techpanda.EMAIL_ERROR_MESSAGE)) {
+			return getElementText(driver, RegisterPageUI_Techpanda.EMAIL_ERROR_MESSAGE);
+		}
+		if (isElementDisplayed(driver, RegisterPageUI_Techpanda.PASSWORD_ERROR_MESSAGE)) {
+			return getElementText(driver, RegisterPageUI_Techpanda.PASSWORD_ERROR_MESSAGE);
+		}
+		if (isElementDisplayed(driver, RegisterPageUI_Techpanda.CONFIRM_PASSWORD_ERROR_MESSAGE)) {
+			return getElementText(driver, RegisterPageUI_Techpanda.CONFIRM_PASSWORD_ERROR_MESSAGE);
+		}
+
+		return "";
+	}
 
 }
