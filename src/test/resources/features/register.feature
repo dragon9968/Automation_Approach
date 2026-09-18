@@ -71,7 +71,7 @@ Feature: TechPanda Account Registration
 
     Examples:
       | firstName | middleName | lastName | email                     | password | confirmPassword | expectedError                                                          |
-      | Long      |            | Nguyen   | longmail                  | 123456   | 123456          | Please include an '@' in the email address.                            |
+      | Long      |            | Nguyen   | longmail                  | 123456   | 123456          | Please include an '@' in the email address. 'longmail' is missing an '@'.|
       | Long      | Dinh       | Nguyen   | long_tester_pro@gmail.com | 123456   | 123456          | There is already an account                                             |
       | Long      | Dinh       | Nguyen   | random_email              | 123456   | 123457          | Please make sure your passwords match.                                 |
       | long      | dinh       | nguyen   | random_email              | 123      | 123             | Please enter 6 or more characters without leading or trailing spaces. |

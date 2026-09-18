@@ -16,13 +16,13 @@ public class CucumberHooks extends BaseTest {
     
     private static final ThreadLocal<WebDriver> threadDriver = new ThreadLocal<>();
 
-    /*@Before(order = 1)
+    @Before(order = 1)
     public void setUp() {
         if (threadDriver.get() == null) {
             // 🌟 Lấy giá trị 'browser' truyền từ lệnh terminal, nếu không truyền thì mặc định lấy 'chrome'
             String browserName = System.getProperty("browser");
             if (browserName == null || browserName.isEmpty()) {
-                browserName = "chrome";
+                browserName = "firefox";
             }
 
             WebDriver driver = getBrowserName(browserName);
@@ -53,7 +53,7 @@ public class CucumberHooks extends BaseTest {
             threadDriver.get().quit();
             threadDriver.remove();
         }
-    }*/
+    }
 
     public static WebDriver getDriver() {
         return threadDriver.get();

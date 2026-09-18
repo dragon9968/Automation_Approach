@@ -8,7 +8,7 @@ import org.testng.ITestContext;
 @CucumberOptions(
     features = "src/test/resources/features",// Đường dẫn tới thư mục chứa file .feature
     glue = {"stepDefinitions", "hooks"},// Nơi chứa code xử lý step và hooks
-    tags = "@database",
+    tags = "@invalid_email",
     plugin = {
         "pretty",
         "html:target/cucumber-report.html", // Xuất báo cáo html cơ bản

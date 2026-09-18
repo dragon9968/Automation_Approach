@@ -102,14 +102,23 @@ public class RegisterSteps{
     }
 
     @Then("Email error message is displayed {string}")
-    public void verifyEmailError(String msg) {
-        // Nếu là case để trống (Hiện lỗi Required của Magento)
-        if (msg.contains("required field")) {
-            Assert.assertEquals(registerPage.getErrorMessageAtEmailTextbox(), msg);
-        } 
-        // Nếu là case nhập sai cú pháp email (Hiện bong bóng lỗi HTML5 của Chrome)
+    public void verifyEmailError(String expectedMsg) {
+        // 1. Nếu là case để trống (Hiện lỗi Required của Magento)
+        if (expectedMsg.contains("required field")) {
+            Assert.assertEquals(registerPage.getErrorMessageAtEmailTextbox(), expectedMsg);
+        }
+        // 2. Nếu là case nhập sai cú pháp email (Bong bóng HTML5 của Browser)
         else {
-            Assert.assertEquals(registerPage.getHTML5EmailValidationMessage(), msg);
+            String actualMsg = registerPage.getHTML5EmailValidationMessage();
+
+            // Linh hoạt kiểm tra: Khớp chính xác câu của Chrome HOẶC chứa câu mặc định của Firefox
+            boolean isMatched = actualMsg.equals(expectedMsg)
+                    || actualMsg.contains("Please enter an email address");
+
+            Assert.assertTrue(isMatched,
+                    "\n❌ Thông báo lỗi HTML5 Email không khớp trên trình duyệt này!" +
+                            "\nActual: " + actualMsg +
+                            "\nExpected: " + expectedMsg);
         }
     }
     

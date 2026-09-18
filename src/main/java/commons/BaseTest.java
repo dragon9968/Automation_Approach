@@ -1,18 +1,12 @@
 package commons;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.Duration;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -21,92 +15,97 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.Assert;
-import org.testng.Reporter;
-import org.testng.annotations.BeforeSuite;
-
-//import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseTest {
 	private WebDriver driverBaseTest;
 	protected final Log log;
-	
+
 	protected BaseTest() {
 		log = LogFactory.getLog(getClass());
 	}
-	
+
 	public WebDriver getBrowserName(String browserName) {
+		// 🌟 TỰ ĐỘNG BẬT HEADLESS KHI CHẠY TRÊN GITHUB ACTIONS HOẶC TRUYỀN -Dheadless=true
+		boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "false"))
+				|| System.getenv("GITHUB_ACTIONS") != null;
+
 		if (browserName.equalsIgnoreCase("fireFox")) {
-            FirefoxOptions options = new FirefoxOptions();        
-            options.addPreference("security.warn_submit_secure_to_insecure", false);
-            options.addPreference("security.warn_submit_insecure", false);
-            options.addPreference("security.insecure_field_warning.contextual.enabled", false);
-            options.addPreference("dom.security.https_only_mode", false);
-            options.addArguments("--user-agent=AutomationBrowser");	
-            //options.addArguments("-headless"); 
-            //options.addArguments("--window-size=1920,1080");
-			driverBaseTest = new FirefoxDriver();
-			
+			FirefoxOptions options = new FirefoxOptions();
+			options.addPreference("security.warn_submit_secure_to_insecure", false);
+			options.addPreference("security.warn_submit_insecure", false);
+			options.addPreference("security.insecure_field_warning.contextual.enabled", false);
+			options.addPreference("dom.security.https_only_mode", false);
+			options.addArguments("--user-agent=AutomationBrowser");
+			if (isHeadless) {
+				options.addArguments("-headless");
+				options.addArguments("--window-size=1920,1080");
+			}
+			driverBaseTest = new FirefoxDriver(options);
+
 		} else if(browserName.equalsIgnoreCase("chrome")) {
 			ChromeOptions options = new ChromeOptions();
 			options.setExperimentalOption("useAutomationExtension", false);
 			options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
-            options.addArguments("--allow-running-insecure-content");
-            options.addArguments("--ignore-certificate-errors");
-            options.addArguments("--disable-web-security");
-            options.addArguments("--unsafely-treat-insecure-origin-as-secure=http://live.techpanda.org");
-            //options.addArguments("--user-data-dir=" + System.getProperty("java.io.tmpdir") + "chrome_automation_profile" + System.currentTimeMillis());
-            options.addArguments("--user-agent=AutomationBrowser");
+			options.addArguments("--allow-running-insecure-content");
+			options.addArguments("--ignore-certificate-errors");
+			options.addArguments("--disable-web-security");
+			options.addArguments("--unsafely-treat-insecure-origin-as-secure=http://live.techpanda.org");
+			options.addArguments("--user-agent=AutomationBrowser");
 			options.addArguments("--incognito");
 			options.addArguments("--remote-allow-origins=*");
-           // options.addArguments("--headless=new");
-           // options.addArguments("--window-size=1920,1080");
+
+			if (isHeadless) {
+				options.addArguments("--headless=new");
+				options.addArguments("--window-size=1920,1080");
+			}
 			driverBaseTest = new ChromeDriver(options);
-			
+
 		} else if(browserName.equalsIgnoreCase("edge")) {
-			driverBaseTest = new EdgeDriver();
+			EdgeOptions options = new EdgeOptions();
+			options.addArguments("--user-agent=AutomationBrowser");
+			options.addArguments("--remote-allow-origins=*");
 
-	    } else if(browserName.equalsIgnoreCase("ie")) {
+			if (isHeadless) {
+				options.addArguments("--headless=new");
+				options.addArguments("--window-size=1920,1080");
+			}
+			// 🌟 BỔ SUNG: Bật EdgeOptions hỗ trợ Headless cho Edge
+			driverBaseTest = new EdgeDriver(options);
 
-		driverBaseTest = new InternetExplorerDriver();
-	    } 
-			
-		else {
-			throw new RuntimeException("Browser name is invalid");
+		} else if(browserName.equalsIgnoreCase("ie")) {
+			driverBaseTest = new InternetExplorerDriver();
+		} else {
+			throw new RuntimeException("Browser name is invalid: " + browserName);
 		}
-		
-		driverBaseTest.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-		driverBaseTest.get(GlobalConstants.TECHPANDA_PAGE_URL);
-		driverBaseTest.manage().window().maximize();
 
-		
+		// Tận dụng hằng số LONG_TIMEOUT từ GlobalConstants
+		driverBaseTest.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
+		driverBaseTest.get(GlobalConstants.TECHPANDA_PAGE_URL);
+
+		if (!isHeadless) {
+			driverBaseTest.manage().window().maximize();
+		}
+
 		return driverBaseTest;
 	}
 
 	public WebDriver getDriverInstance() {
 		return this.driverBaseTest;
 	}
-	
 
-	
-	
 	protected int generateRandomNumber() {
 		Random rand = new Random();
 		return rand.nextInt(99999);
 	}
-	
-	
+
 	public void sleepInSecond(long timeInSecond) {
 		try {
 			Thread.sleep(timeInSecond * 1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
+
 	protected void closeBrowserAndDriver() {
 		String cmd = "";
 		try {
@@ -117,41 +116,20 @@ public class BaseTest {
 			log.info("Driver instance name = " + driverInstanceName);
 
 			if (driverInstanceName.contains("chrome")) {
-				if (osName.contains("window")) {
-					cmd = "taskkill /F /FI \"IMAGENAME eq chromedriver*\"";
-				} else {
-					cmd = "pkill chromedriver";
-				}
+				cmd = osName.contains("window") ? "taskkill /F /FI \"IMAGENAME eq chromedriver*\"" : "pkill chromedriver";
 			} else if (driverInstanceName.contains("internetexplorer")) {
-				if (osName.contains("window")) {
-					cmd = "taskkill /F /FI \"IMAGENAME eq IEDriverServer*\"";
-				}
+				if (osName.contains("window")) cmd = "taskkill /F /FI \"IMAGENAME eq IEDriverServer*\"";
 			} else if (driverInstanceName.contains("firefox")) {
-				if (osName.contains("windows")) {
-					cmd = "taskkill /F /FI \"IMAGENAME eq geckodriver*\"";
-				} else {
-					cmd = "pkill geckodriver";
-				}
+				cmd = osName.contains("window") ? "taskkill /F /FI \"IMAGENAME eq geckodriver*\"" : "pkill geckodriver";
 			} else if (driverInstanceName.contains("edge")) {
-				if (osName.contains("window")) {
-					cmd = "taskkill /F /FI \"IMAGENAME eq msedgedriver*\"";
-				} else {
-					cmd = "pkill msedgedriver";
-				}
+				cmd = osName.contains("window") ? "taskkill /F /FI \"IMAGENAME eq msedgedriver*\"" : "pkill msedgedriver";
 			} else if (driverInstanceName.contains("opera")) {
-				if (osName.contains("window")) {
-					cmd = "taskkill /F /FI \"IMAGENAME eq operadriver*\"";
-				} else {
-					cmd = "pkill operadriver";
-				}
+				cmd = osName.contains("window") ? "taskkill /F /FI \"IMAGENAME eq operadriver*\"" : "pkill operadriver";
 			} else if (driverInstanceName.contains("safari")) {
-				if (osName.contains("mac")) {
-					cmd = "pkill safaridriver";
-				}
+				if (osName.contains("mac")) cmd = "pkill safaridriver";
 			}
 
 			if (driverBaseTest != null) {
-				//IE: lưu lại các phiên đăng nhập trước đó (Khác Thread)
 				driverBaseTest.manage().deleteAllCookies();
 				driverBaseTest.quit();
 			}
@@ -161,9 +139,7 @@ public class BaseTest {
 			try {
 				Process process = Runtime.getRuntime().exec(cmd);
 				process.waitFor();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
