@@ -29,7 +29,7 @@ Feature: TechPanda Account Registration
       | firstName | middleName | lastName | email    | password | confirmPassword |
       | Long      |            | Nguyen   | longmail | 123456   | 123456          |
     And the user clicks the Register button
-    Then Email error message is displayed "Please include an '@' in the email address. 'longmail' is missisng an '@'."
+    Then Email error message is displayed "Please include an '@' in the email address. 'longmail' is missings an '@'."
 
   Scenario: Register with existing email
     When the user enters the following registration details:
