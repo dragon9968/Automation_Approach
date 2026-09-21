@@ -14,27 +14,21 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 
-import commons.BaseTest;
+import commons.DriverManager; // 🌟 IMPORT DRIVERMANAGER
 import commons.GlobalConstants;
 
-public class ReportNGListener implements ITestListener{
+public class ReportNGListener implements ITestListener {
 
 	@Override
 	public void onFinish(ITestContext arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onStart(ITestContext arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onTestFailedButWithinSuccessPercentage(ITestResult arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public String captureScreenshot(WebDriver driver, String screenshotName) {
@@ -50,37 +44,31 @@ public class ReportNGListener implements ITestListener{
 			return e.getMessage();
 		}
 	}
-	
+
 	@Override
 	public void onTestFailure(ITestResult result) {
 		System.setProperty("org.uncommons.reportng.escape-output", "false");
 
-		Object testClass = result.getInstance();
-		WebDriver webDriver = ((BaseTest) testClass).getDriverInstance();
+		// 🌟 Lấy driver trực tiếp từ DriverManager
+		WebDriver webDriver = DriverManager.getDriver();
 
-		String screenshotPath = captureScreenshot(webDriver, result.getName());
-		Reporter.getCurrentTestResult();
-		Reporter.log("<br><a target=\"_blank\" href=\"file:///" + screenshotPath + "\">" + "<img src=\"file:///" + screenshotPath + "\" " + "height='100' width='150'/> " + "</a></br>");
-		Reporter.setCurrentTestResult(null);		
+		if (webDriver != null) {
+			String screenshotPath = captureScreenshot(webDriver, result.getName());
+			Reporter.getCurrentTestResult();
+			Reporter.log("<br><a target=\"_blank\" href=\"file:///" + screenshotPath + "\">" + "<img src=\"file:///" + screenshotPath + "\" " + "height='100' width='150'/> " + "</a></br>");
+			Reporter.setCurrentTestResult(null);
+		}
 	}
 
-	
 	@Override
 	public void onTestSkipped(ITestResult arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onTestStart(ITestResult arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onTestSuccess(ITestResult arg0) {
-		// TODO Auto-generated method stub
-		
 	}
-
 }

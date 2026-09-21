@@ -1,41 +1,35 @@
 package hooks;
 
 import commons.BaseTest;
+import commons.DriverManager;
+import commons.GlobalConstants;
+import api.helpers.SessionManager;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import org.openqa.selenium.WebDriver;
-
+import io.cucumber.java.Scenario;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import io.cucumber.java.Scenario;
-import api.helpers.SessionManager;
-import commons.GlobalConstants;
+import org.openqa.selenium.WebDriver;
 
-// Cho kế thừa BaseTest để xài lại hàm khởi tạo Browser của anh
-public class CucumberHooks extends BaseTest {
-    
-    private static final ThreadLocal<WebDriver> threadDriver = new ThreadLocal<>();
+public class CucumberHooks {
 
     @Before(order = 1)
     public void setUp() {
-        if (threadDriver.get() == null) {
-            // 🌟 Lấy giá trị 'browser' truyền từ lệnh terminal, nếu không truyền thì mặc định lấy 'chrome'
+        if (DriverManager.getDriver() == null) {
             String browserName = System.getProperty("browser");
             if (browserName == null || browserName.isEmpty()) {
                 browserName = "firefox";
             }
-
-            WebDriver driver = getBrowserName(browserName);
-            threadDriver.set(driver);
+            // Gọi BaseTest khởi tạo Driver rồi lưu vào DriverManager
+            WebDriver driver = new BaseTest().createDriver(browserName);
+            DriverManager.setDriver(driver);
         }
     }
 
     @Before(value = "@use_session", order = 2)
     public void handleAutoLoginSession() {
-        WebDriver driver = threadDriver.get();
-        // 🌟 Sử dụng account mặc định khai báo tập trung
         SessionManager.injectLoginSession(
-                driver,
+                DriverManager.getDriver(),
                 GlobalConstants.TECHPANDA_DEFAULT_USER,
                 GlobalConstants.TECHPANDA_DEFAULT_PASSWORD
         );
@@ -43,19 +37,15 @@ public class CucumberHooks extends BaseTest {
 
     @After
     public void tearDown(Scenario scenario) {
-        if (scenario.isFailed()) {
-            byte[] screenshot = ((TakesScreenshot) threadDriver.get())
-                                .getScreenshotAs(OutputType.BYTES);
+        if (scenario.isFailed() && DriverManager.getDriver() != null) {
+            byte[] screenshot = ((TakesScreenshot) DriverManager.getDriver())
+                    .getScreenshotAs(OutputType.BYTES);
             scenario.attach(screenshot, "image/png", "📸 ẢNH CHỤP MÀN HÌNH LÚC BỊ LỖI");
         }
 
-        if (threadDriver.get() != null) {
-            threadDriver.get().quit();
-            threadDriver.remove();
-        }
+        // Gọi hàm đóng driver và giải phóng ThreadLocal
+        DriverManager.quitDriver();
     }
 
-    public static WebDriver getDriver() {
-        return threadDriver.get();
-    }
+    // Khi bất kỳ StepDefinition nào cần dùng Driver, chỉ cần gọi: DriverManager.getDriver()
 }

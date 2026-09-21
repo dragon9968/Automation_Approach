@@ -1,7 +1,7 @@
 package stepDefinitions;
 
 import commons.PageGeneratorManager;
-import hooks.CucumberHooks;
+import commons.DriverManager;
 import io.cucumber.java.en.*;
 import org.testng.Assert;
 import pageObjects.MobilePageObject_Techpanda;
@@ -15,7 +15,7 @@ public class MobileSteps {
 
     @When("the user navigates to the Mobile list page cleanly")
     public void theUserNavigatesToTheMobileListPageCleanly() {
-        this.mobilePage = PageGeneratorManager.getMobilePageTechPanda(CucumberHooks.getDriver());
+        this.mobilePage = PageGeneratorManager.getMobilePageTechPanda(DriverManager.getDriver());
         mobilePage.clickMobileMenu();
         mobilePage.clickTVMenu();
         mobilePage.clickMobileMenu();

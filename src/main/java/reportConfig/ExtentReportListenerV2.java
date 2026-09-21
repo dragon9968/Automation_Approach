@@ -16,17 +16,15 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
 
-import commons.BaseTest;
+import commons.DriverManager; // 🌟 1. Import DriverManager
 
 public class ExtentReportListenerV2 implements ITestListener {
 	@Override
 	public void onStart(ITestContext context) {
-		// no-op: reporter is lazily initialized in ExtentManager when a test starts
 	}
 
 	@Override
 	public void onFinish(ITestContext context) {
-		// Ensure any remaining tests are cleaned up and report flushed
 		ExtentManager.endTest();
 		if (ExtentManager.getReporter() != null) {
 			ExtentManager.getReporter().flush();
@@ -40,7 +38,6 @@ public class ExtentReportListenerV2 implements ITestListener {
 		if (desc == null) {
 			desc = result.getName();
 		}
-		// Start a new test for the current thread
 		ExtentManager.startTest(testName, desc);
 	}
 
@@ -54,16 +51,8 @@ public class ExtentReportListenerV2 implements ITestListener {
 
 	@Override
 	public void onTestFailure(ITestResult result) {
-		// Try to capture screenshot if driver is available
-		Object testClass = result.getInstance();
-		WebDriver webDriver = null;
-		try {
-			if (testClass instanceof BaseTest) {
-				webDriver = ((BaseTest) testClass).getDriverInstance();
-			}
-		} catch (Exception e) {
-			// ignore - we will log failure without screenshot
-		}
+		// 🌟 2. Lấy WebDriver trực tiếp từ DriverManager gọn gàng
+		WebDriver webDriver = DriverManager.getDriver();
 
 		ExtentTest test = ExtentManager.getTest();
 		String message = result.getThrowable() != null ? result.getThrowable().toString() : "Test Failed";
@@ -71,13 +60,11 @@ public class ExtentReportListenerV2 implements ITestListener {
 			try {
 				if (webDriver != null) {
 					String base64Screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BASE64);
-					// Attach screenshot using MediaEntityBuilder. Note: pass base64 string directly.
 					test.fail(message, MediaEntityBuilder.createScreenCaptureFromBase64String(base64Screenshot).build());
 				} else {
 					test.fail(message);
 				}
 			} catch (Exception e) {
-				// If attaching media fails, at least log the failure
 				test.fail(message + " (screenshot capture failed: " + e.getMessage() + ")");
 			}
 		}
@@ -93,7 +80,5 @@ public class ExtentReportListenerV2 implements ITestListener {
 
 	@Override
 	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-		// no-op
 	}
-
 }

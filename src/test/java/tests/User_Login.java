@@ -38,7 +38,7 @@ public class User_Login extends BaseTest{
 	@BeforeClass
 	public void beforeClass(String browserame) {
 		System.out.println("Run on " + browserame);
-		driver_Test_Case = getBrowserName(browserame);
+		driver_Test_Case = createDriver(browserame);
 		jsExecutor = (JavascriptExecutor) driver_Test_Case;
 		// Home Page
 		// homePage = new UserHomePageObject_Techpanda(driver_Test_Case);

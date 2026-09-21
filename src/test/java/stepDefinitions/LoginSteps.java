@@ -2,7 +2,7 @@ package stepDefinitions;
 
 import commons.PageGeneratorManager;
 import dtos.UserLoginDTO;
-import hooks.CucumberHooks;
+import commons.DriverManager;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.WebDriver;
 import pageObjects.UserHomePageObject_Techpanda;
@@ -16,10 +16,11 @@ public class LoginSteps {
      UserHomePageObject_Techpanda homePage;
      UserLoginPageObject_Techpanda loginPage;
      DashBoardPageObject_Techpanda dashboardPage;
-     WebDriver driver= CucumberHooks.getDriver();
+     WebDriver driver;
      
     @When("the user navigates to the Login page")
     public void theUserNavigatesToTheLoginPage() {
+        driver = DriverManager.getDriver();
         homePage = PageGeneratorManager.getHomePageTechPanda(driver);
         homePage.openLoginPage();
         loginPage = PageGeneratorManager.getLoginPageTechPanda(driver);

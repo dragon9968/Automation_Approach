@@ -1,8 +1,8 @@
 package stepDefinitions;
 
+import commons.DriverManager;
 import commons.PageGeneratorManager;
 import dtos.UserRegisterDTO;
-import hooks.CucumberHooks;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -53,7 +53,7 @@ public class RegisterSteps{
 
     @When("the user navigates to the Registration page")
     public void theUserNavigatesToTheRegistrationPage() {
-        driver = CucumberHooks.getDriver();
+        driver = DriverManager.getDriver();
     	homePage = PageGeneratorManager.getHomePageTechPanda(driver); 
         homePage.openRegisterPage();
         registerPage = PageGeneratorManager.getRegisterPageTechPanda(driver);
