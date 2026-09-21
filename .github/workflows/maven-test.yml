@@ -20,6 +20,22 @@ jobs:
     # Chỉ định loại máy ảo của GitHub để chạy test (Ở đây dùng Linux Ubuntu)
     runs-on: ubuntu-latest
 
+    # 🌟 1. BỔ SUNG DỊCH VỤ POSTGRESQL CHẠY TỰ ĐỘNG BẰNG DOCKER
+    services:
+        postgres:
+          image: postgres:15
+          env:
+            POSTGRES_DB: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: "123456" # Mật khẩu khớp với GlobalConstants
+          ports:
+            - 5432:5432
+          options: >-
+            --health-cmd pg_isready
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+
     # 🌟 3. CƠ CHẾ CHẠY SONG SONG (MATRIX STRATEGY)
     strategy:
       # fail-fast = false: Nếu 1 trình duyệt bị Fail, 2 trình duyệt còn lại VẪN TIẾP TỤC CHẠY cho đến hết (không bị ngắt ngang)
@@ -34,6 +50,18 @@ jobs:
       # Bước 4.1: Kéo (Pull) toàn bộ code từ GitHub Repository về máy ảo
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+    # 🌟 2. BỔ SUNG BƯỚC KHỞI TẠO BẢNG users_test TRƯỚC KHI CHẠY TEST
+      - name: Setup Database Schema
+        env:
+         PGPASSWORD: "123456"
+        run: |
+                  psql -h localhost -U postgres -d postgres -c "
+                  CREATE TABLE IF NOT EXISTS users_test (
+                      email VARCHAR(255) PRIMARY KEY,
+                      pass VARCHAR(255),
+                      status VARCHAR(50)
+          );"
 
       # Bước 4.2: Tải và cài đặt môi trường Java 21 trên máy ảo
       - name: Set up JDK 21
