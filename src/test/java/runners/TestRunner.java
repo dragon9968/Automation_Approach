@@ -12,6 +12,8 @@ import org.testng.ITestContext;
     plugin = {
         "pretty",
         "html:target/cucumber-report.html", // Xuất báo cáo html cơ bản
+        "html:target/cucumber-reports/cucumber-pretty.html",
+        "json:target/cucumber-reports/cucumber.json",
         "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm",  
         "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
     } 
