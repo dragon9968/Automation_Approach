@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 
 import commons.BaseTest;
 import commons.PageGeneratorManager;
-
+import commons.DataHelper;
 import pageObjects.UserHomePageObject_Techpanda;
 
 import pageObjects.UserRegisterPageObject_Techpanda;
@@ -43,7 +43,7 @@ public class User_Login extends BaseTest{
 		// Home Page
 		// homePage = new UserHomePageObject_Techpanda(driver_Test_Case);
 		homePage = PageGeneratorManager.getHomePageTechPanda(driver_Test_Case);
-		emailAddress = "long" + generateRandomNumber() + "@qa.team";
+		emailAddress = "long" + DataHelper.getRandomNumber()+ "@qa.team";
 
 	}
 	@Test

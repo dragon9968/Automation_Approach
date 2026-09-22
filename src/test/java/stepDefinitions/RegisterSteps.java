@@ -2,6 +2,7 @@ package stepDefinitions;
 
 import commons.DriverManager;
 import commons.PageGeneratorManager;
+import commons.DataHelper;
 import dtos.UserRegisterDTO;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.WebDriver;
@@ -65,7 +66,7 @@ public class RegisterSteps{
         
         String emailAddress = registerData.getEmail();
         if (emailAddress.equals("random_email")) {
-            emailAddress = "longnguyen" + new Random().nextInt(99999) + "@gmail.com";
+            emailAddress = DataHelper.getRandomEmail();
         }
         registerPage.inputToFirstnameTextbox(registerData.getFirstName());
         String middleName = registerData.getMiddleName();
@@ -87,6 +88,7 @@ public class RegisterSteps{
     public void theUserClicksTheRegisterButton() {
         registerPage.clickToRegisterButton();
         registerPage.sleepInSecond(2);
+        DataHelper.sleepInSecond(2);
     }
     
     // ===== VERIFY =====

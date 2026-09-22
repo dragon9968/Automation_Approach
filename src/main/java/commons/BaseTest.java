@@ -80,18 +80,4 @@ public class BaseTest {
 		return driver;
 	}
 
-	// 🌟 Hàm sinh số ngẫu nhiên dùng chung
-	public int generateRandomNumber() {
-		Random rand = new Random();
-		return rand.nextInt(99999);
-	}
-
-	// 🌟 Hàm tạm dừng Thread dùng chung
-	public void sleepInSecond(long timeInSecond) {
-		try {
-			Thread.sleep(timeInSecond * 1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
 }

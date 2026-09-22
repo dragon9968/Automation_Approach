@@ -52,6 +52,7 @@ Feature: TechPanda Account Registration
     And the user clicks the Register button
     Then the system displays a password error message: "Please enter 6 or more characters without leading or trailing spaces."
 
+  @register_success
   Scenario: Register a new account successfully with valid information
     When the user enters the following registration details:
       | firstName | middleName | lastName | email        | password | confirmPassword |
