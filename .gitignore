@@ -4,4 +4,7 @@
 /.project
 /allure-results/
 /ExtentReportV2/
+test-output/
 *.class
+.idea/
+*.log

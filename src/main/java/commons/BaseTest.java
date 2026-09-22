@@ -70,8 +70,12 @@ public class BaseTest {
 			throw new RuntimeException("Browser name is invalid: " + browserName);
 		}
 
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
-		driver.get(GlobalConstants.TECHPANDA_PAGE_URL);
+		//driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
+		//driver.get(GlobalConstants.TECHPANDA_PAGE_URL);
+
+		// dùng properties
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(ConfigManager.getLongTimeout()));
+		driver.get(ConfigManager.getAppUrl());
 
 		if (!isHeadless) {
 			driver.manage().window().maximize();

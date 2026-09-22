@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils; // 🌟 1. Import FileUtils
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.testng.Reporter;
 
 import java.io.File; // 🌟 2. Import File
 import java.text.SimpleDateFormat;
@@ -21,10 +22,21 @@ public class CucumberHooks {
     @Before(order = 1)
     public void setUp() {
         if (DriverManager.getDriver() == null) {
-            String browserName = System.getProperty("browser");
+
+            // 🌟 1. Lấy tham số "browser" trực tiếp từ thẻ  trong file testng.xml
+            String browserName = Reporter.getCurrentTestResult()
+                    .getTestContext()
+                    .getCurrentXmlTest()
+                    .getParameter("browser");
+
+            // 🌟 2. Nếu chạy lẻ không qua testng.xml (vd: chạy từ IDE/Feature file), lấy từ System property -Dbrowser
             if (browserName == null || browserName.isEmpty()) {
-                browserName = "firefox";
+                browserName = System.getProperty("browser", "firefox");
             }
+
+            System.out.println("🚀 [THREAD " + Thread.currentThread().getId() + "] Đang khởi tạo trình duyệt: " + browserName.toUpperCase());
+
+            // 🌟 3. Khởi tạo driver và gán vào ThreadLocal DriverManager
             WebDriver driver = new BaseTest().createDriver(browserName);
             DriverManager.setDriver(driver);
         }

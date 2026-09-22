@@ -12,7 +12,8 @@ public class DatabaseHelper {
             return DriverManager.getConnection(
                     GlobalConstants.DB_POSTGRES_URL,
                     GlobalConstants.DB_POSTGRES_USER,
-                    GlobalConstants.DB_POSTGRES_PASS
+                    //GlobalConstants.DB_POSTGRES_PASS,
+                    ConfigManager.getDbPassword()
             );
         } catch (Exception e) {
             e.printStackTrace();

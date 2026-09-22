@@ -8,7 +8,7 @@ import org.testng.ITestContext;
 @CucumberOptions(
     features = "src/test/resources/features",// Đường dẫn tới thư mục chứa file .feature
     glue = {"stepDefinitions", "hooks"},// Nơi chứa code xử lý step và hooks
-    //tags = "@register_validation",
+    tags = "@register",
     plugin = {
         "pretty",
         "html:target/cucumber-report.html", // Xuất báo cáo html cơ bản
@@ -22,7 +22,7 @@ public class TestRunner extends AbstractTestNGCucumberTests {
 
     // 🌟 KÍCH HOẠT PARALLEL EXECUTION
     @Override
-    @DataProvider(parallel = false)
+    @DataProvider(parallel = true)
     public Object[][] scenarios() {
         return super.scenarios();
     }
@@ -30,7 +30,7 @@ public class TestRunner extends AbstractTestNGCucumberTests {
     // 🌟 Set trực tiếp số luồng cho IDE (Test Runer) tại đây (Ví dụ: 2 luồng)
     @BeforeClass(alwaysRun = true)
     public void setUpParallel(ITestContext context) {
-        context.getSuite().getXmlSuite().setDataProviderThreadCount(2);
+        context.getSuite().getXmlSuite().setDataProviderThreadCount(3);
     }
 
     // 🌟 KHỐI TĨNH THẦN CHÚ: Chạy ngay khi nạp class, chấp hết mọi loại vòng đời!

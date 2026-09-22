@@ -3,12 +3,14 @@ package api.helpers;
 import api.dtos.request.LoginRequestDTO;
 import api.dtos.response.LoginResponseDTO;
 import api.services.AuthApiService;
+import commons.ConfigManager;
 import commons.GlobalConstants; // Import GlobalConstants
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
-public class SessionManager {
+import java.net.URI;
 
+public class SessionManager {
     public static void injectLoginSession(WebDriver driver, String username, String password) {
         driver.manage().deleteAllCookies();
 
@@ -17,11 +19,14 @@ public class SessionManager {
         LoginRequestDTO requestData = new LoginRequestDTO(username, password);
         LoginResponseDTO responseData = apiService.executeLoginApi(requestData);
         System.out.println("--> [TRUY VẾT] Mã trạng thái API trả về: " + responseData.getStatusCode());
+        //dùng properties file
+        String domain = URI.create(ConfigManager.getAppUrl()).getHost();
 
         for (io.restassured.http.Cookie apiCookie : responseData.getCookies()) {
             if (apiCookie.getName().equals("frontend")) {
                 Cookie seleniumCookie = new Cookie.Builder(apiCookie.getName(), apiCookie.getValue())
-                        .domain(GlobalConstants.TECHPANDA_DOMAIN) // 🌟 Tận dụng GlobalConstants
+                      //  .domain(GlobalConstants.TECHPANDA_DOMAIN) // 🌟 Tận dụng GlobalConstants
+                        .domain("." + domain)
                         .path("/")
                         .isSecure(false)
                         .build();

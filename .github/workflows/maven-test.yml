@@ -21,7 +21,8 @@ jobs:
         env:
           POSTGRES_DB: postgres
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: "123456"
+          # 🌟 1. Lấy mật khẩu Docker Container từ GitHub Secret
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
@@ -41,7 +42,8 @@ jobs:
 
       - name: Setup Database Schema
         env:
-          PGPASSWORD: "123456"
+          # 🌟 2. Lấy mật khẩu psql CLI từ GitHub Secret
+          PGPASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
           psql -h localhost -U postgres -d postgres -c "
           CREATE TABLE IF NOT EXISTS users_test (
@@ -58,7 +60,11 @@ jobs:
           cache: maven
 
       - name: Run Automation Tests
-        run: mvn test -Dbrowser=${{ matrix.browser }}
+        env:
+          # 🌟 3. Truyền DB_PASS từ Secret vào Biến môi trường hệ thống cho Java đọc
+          DB_PASS: ${{ secrets.DB_PASSWORD }}
+        # 🌟 4. Truyền thêm tham số -Denv=dev (hoặc qa) để chọn môi trường
+        run: mvn test -Dbrowser=${{ matrix.browser }} -Denv=dev
 
       - name: Upload Test Report
         if: always()
@@ -73,9 +79,9 @@ jobs:
           retention-days: 7
 
       - name: 📤 Upload Failed Screenshots as Artifacts
-        if: failure() # Chỉ chạy bước này khi có test case bị FAIL
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-            name: failed-screenshots-${{ matrix.browser }}
-            path: target/screenshots/
-            retention-days: 7
+          name: failed-screenshots-${{ matrix.browser }}
+          path: target/screenshots/
+          retention-days: 7
