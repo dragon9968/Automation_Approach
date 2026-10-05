@@ -22,9 +22,9 @@ public class BaseTest {
 	}
 
 	// 🌟 Hàm khởi tạo Driver với tên mới createDriver
-	public WebDriver createDriver(String browserName) {
+	public static synchronized WebDriver createDriver(String browserName) {
 		WebDriver driver;
-		boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "false"))
+		boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "true"))
 				|| System.getenv("GITHUB_ACTIONS") != null;
 
 		if (browserName.equalsIgnoreCase("firefox")) {
@@ -34,10 +34,15 @@ public class BaseTest {
 			options.addPreference("security.insecure_field_warning.contextual.enabled", false);
 			options.addPreference("dom.security.https_only_mode", false);
 			options.addArguments("--user-agent=AutomationBrowser");
+			options.addArguments("-no-remote");
+			options.addPreference("profile.allow_multiple_instances", true);
 			if (isHeadless) {
 				options.addArguments("-headless");
-				options.addArguments("--window-size=1920,1080");
+				// 🌟 Cờ chuẩn dành riêng cho Firefox
+				options.addArguments("--width=1920");
+				options.addArguments("--height=1080");
 			}
+			System.setProperty("webdriver.gecko.driver.timeout", "60000");
 			driver = new FirefoxDriver(options);
 
 		} else if (browserName.equalsIgnoreCase("chrome")) {
@@ -75,10 +80,18 @@ public class BaseTest {
 
 		// dùng properties
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(ConfigManager.getLongTimeout()));
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+		driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
 		driver.get(ConfigManager.getAppUrl());
 
 		if (!isHeadless) {
 			driver.manage().window().maximize();
+		}
+
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 
 		return driver;

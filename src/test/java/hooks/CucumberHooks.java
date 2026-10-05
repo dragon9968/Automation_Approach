@@ -22,21 +22,29 @@ public class CucumberHooks {
     @Before(order = 1)
     public void setUp() {
         if (DriverManager.getDriver() == null) {
+            String browserName = null;
 
-            // 🌟 1. Lấy tham số "browser" trực tiếp từ thẻ  trong file testng.xml
-            String browserName = Reporter.getCurrentTestResult()
-                    .getTestContext()
-                    .getCurrentXmlTest()
-                    .getParameter("browser");
+            // Bọc try-catch chống NullPointerException khi chạy trực tiếp từ Feature file
+            try {
+                if (Reporter.getCurrentTestResult() != null
+                        && Reporter.getCurrentTestResult().getTestContext() != null
+                        && Reporter.getCurrentTestResult().getTestContext().getCurrentXmlTest() != null) {
+                    browserName = Reporter.getCurrentTestResult()
+                            .getTestContext()
+                            .getCurrentXmlTest()
+                            .getParameter("browser");
+                }
+            } catch (Exception e) {
+                browserName = null;
+            }
 
-            // 🌟 2. Nếu chạy lẻ không qua testng.xml (vd: chạy từ IDE/Feature file), lấy từ System property -Dbrowser
+            // Nếu chạy trực tiếp từ file .feature (không qua testng.xml), mặc định mở Chrome
             if (browserName == null || browserName.isEmpty()) {
-                browserName = System.getProperty("browser", "firefox");
+                browserName = System.getProperty("browser", "chrome");
             }
 
             System.out.println("🚀 [THREAD " + Thread.currentThread().getId() + "] Đang khởi tạo trình duyệt: " + browserName.toUpperCase());
 
-            // 🌟 3. Khởi tạo driver và gán vào ThreadLocal DriverManager
             WebDriver driver = new BaseTest().createDriver(browserName);
             DriverManager.setDriver(driver);
         }
@@ -86,8 +94,8 @@ public class CucumberHooks {
     }
 
     // 🌟 2. HOOK DỌN DẸP DRIVER (order = 0 chạy CUỐI CÙNG)
-    @After(order = 0)
-    public void tearDownDriver() {
+     @After(order = 0)
+   public void tearDownDriver() {
         DriverManager.quitDriver();
     }
 }

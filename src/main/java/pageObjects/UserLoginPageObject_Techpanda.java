@@ -11,22 +11,21 @@ public class UserLoginPageObject_Techpanda extends BasePage {
 	public UserLoginPageObject_Techpanda(WebDriver driver) {
 		this.driver = driver;
 	}
-	
-//Có return class object để apply cho Page_Generator 2,3
+
 	public UserHomePageObject_Techpanda clickToLoginButton() {
 		waitForElementClickable(driver, LoginPageUI_Techpanda.LOGIN_BUTTON);
 		clickToElement(driver, LoginPageUI_Techpanda.LOGIN_BUTTON);
 		return PageGeneratorManager.getHomePageTechPanda(driver);
 	}
 
-	public void inputToEmailTextbox(String Email) {
+	public void inputToEmailTextbox(String email) {
 		waitForElementVisible(driver, LoginPageUI_Techpanda.EMAIL_TEXTBOX);
-		sendkeyToElement(driver, LoginPageUI_Techpanda.EMAIL_TEXTBOX, Email);
+		sendkeyToElement(driver, LoginPageUI_Techpanda.EMAIL_TEXTBOX, email);
 	}
 
-	public void inputToPasswordTextbox(String Password) {
+	public void inputToPasswordTextbox(String password) {
 		waitForElementVisible(driver, LoginPageUI_Techpanda.PASSWORD_TEXTBOX);
-		sendkeyToElement(driver, LoginPageUI_Techpanda.PASSWORD_TEXTBOX, Password);
+		sendkeyToElement(driver, LoginPageUI_Techpanda.PASSWORD_TEXTBOX, password);
 	}
 
 	public String getUnsuccessfullErrorMessage() {
@@ -39,7 +38,17 @@ public class UserLoginPageObject_Techpanda extends BasePage {
 		return getElementText(driver, LoginPageUI_Techpanda.EMAIL_ERROR_MESSAGE);
 	}
 
-	public UserHomePageObject_Techpanda loginAsUser(String emailAddress , String password) {
+	public String getErrorMessageAtPasswordTextbox() {
+		waitForElementVisible(driver, LoginPageUI_Techpanda.PASSWORD_ERROR_MESSAGE);
+		return getElementText(driver, LoginPageUI_Techpanda.PASSWORD_ERROR_MESSAGE);
+	}
+
+	public String getHTML5EmailValidationMessage() {
+		waitForElementVisible(driver, LoginPageUI_Techpanda.EMAIL_TEXTBOX);
+		return getElementValidationMessage(driver, LoginPageUI_Techpanda.EMAIL_TEXTBOX);
+	}
+
+	public UserHomePageObject_Techpanda loginAsUser(String emailAddress, String password) {
 		inputToEmailTextbox(emailAddress);
 		inputToPasswordTextbox(password);
 		clickToLoginButton();

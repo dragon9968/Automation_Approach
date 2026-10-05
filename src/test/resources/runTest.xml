@@ -12,7 +12,6 @@
 
 <!--Global -->
  
- <parameter name="environment" value="staging"/>
   <test name="Run on Firefox">
      <parameter name = "browser" value = "firefox"/>
     <classes>  
