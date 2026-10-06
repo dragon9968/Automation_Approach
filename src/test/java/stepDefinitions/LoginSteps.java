@@ -40,12 +40,12 @@ public class LoginSteps {
 
     @And("the user clicks the Login button")
     public void theUserClicksTheLoginButton() {
-        loginPage.clickToLoginButton();
+        dashboardPage = loginPage.clickToLoginButton();
     }
 
     @Then("the user verifies page title is {string}, URL contains {string} and welcome message contains {string}")
     public void verifyDashboardDetails(String expectedTitle, String expectedUrlPart, String expectedWelcomeText) {
-        dashboardPage = PageGeneratorManager.getDashBoardPageObject_Techpanda(driver);
+        dashboardPage.waitForUrlContains(driver, expectedUrlPart);
         Assert.assertEquals(dashboardPage.getDashboardPageTitle(), expectedTitle, "🚨 Lỗi: Page Title không khớp!");
         Assert.assertTrue(dashboardPage.getDashboardPageUrl().contains(expectedUrlPart), "🚨 Lỗi: URL không khớp!");
         String actualWelcomeText = dashboardPage.getWelcomeMessageText().toLowerCase();

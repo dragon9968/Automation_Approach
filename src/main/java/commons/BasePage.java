@@ -573,7 +573,15 @@ public class BasePage {
 		WebDriverWait explicitWait = new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT));
 		explicitWait.until(ExpectedConditions.elementToBeClickable(getByLocator(getDynamicXpath(locatorType, dynamicValues))));
 	}
-	
+	public void waitForUrlContains(WebDriver driver, String expectedUrlPart) {
+		WebDriverWait explicitWait = new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT));
+		explicitWait.until(ExpectedConditions.urlContains(expectedUrlPart));
+	}
+
+	public void waitForPageTitle(WebDriver driver, String expectedTitle) {
+		WebDriverWait explicitWait = new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT));
+		explicitWait.until(ExpectedConditions.titleIs(expectedTitle));
+	}
 	
 	public void sleepInSecond(long timeInSecond) {
 		try {

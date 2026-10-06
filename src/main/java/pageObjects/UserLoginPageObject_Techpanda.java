@@ -12,10 +12,10 @@ public class UserLoginPageObject_Techpanda extends BasePage {
 		this.driver = driver;
 	}
 
-	public UserHomePageObject_Techpanda clickToLoginButton() {
+	public DashBoardPageObject_Techpanda clickToLoginButton() {
 		waitForElementClickable(driver, LoginPageUI_Techpanda.LOGIN_BUTTON);
 		clickToElement(driver, LoginPageUI_Techpanda.LOGIN_BUTTON);
-		return PageGeneratorManager.getHomePageTechPanda(driver);
+		return PageGeneratorManager.getDashBoardPageObject_Techpanda(driver);
 	}
 
 	public void inputToEmailTextbox(String email) {

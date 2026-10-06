@@ -66,6 +66,8 @@ public class BaseTest {
 			EdgeOptions options = new EdgeOptions();
 			options.addArguments("--user-agent=AutomationBrowser");
 			options.addArguments("--remote-allow-origins=*");
+			options.addArguments("--no-sandbox");
+			options.addArguments("--disable-dev-shm-usage");
 			if (isHeadless) {
 				options.addArguments("--headless=new");
 				options.addArguments("--window-size=1920,1080");
