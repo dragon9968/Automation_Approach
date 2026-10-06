@@ -5,6 +5,7 @@ Feature: TechPanda Account Login
     Given the user is on the TechPanda homepage
     When the user navigates to the Login page
 
+
   Scenario: TC_01_Login_Successfully_With_Valid_Credentials
     When the user enters the following login credentials:
       | email                     | password |

@@ -24,7 +24,7 @@ public class BaseTest {
 	// 🌟 Hàm khởi tạo Driver với tên mới createDriver
 	public static synchronized WebDriver createDriver(String browserName) {
 		WebDriver driver;
-		boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "true"))
+		boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "false"))
 				|| System.getenv("GITHUB_ACTIONS") != null;
 
 		if (browserName.equalsIgnoreCase("firefox")) {
@@ -68,6 +68,10 @@ public class BaseTest {
 			options.addArguments("--remote-allow-origins=*");
 			options.addArguments("--no-sandbox");
 			options.addArguments("--disable-dev-shm-usage");
+			// 🌟 BỔ SUNG: Bỏ qua cảnh báo "Form is not secure" cho trang HTTP trên Edge CI/CD
+			options.addArguments("--ignore-certificate-errors");
+			options.addArguments("--allow-running-insecure-content");
+			options.addArguments("--unsafely-treat-insecure-origin-as-secure=http://live.techpanda.org");
 			if (isHeadless) {
 				options.addArguments("--headless=new");
 				options.addArguments("--window-size=1920,1080");

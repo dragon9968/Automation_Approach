@@ -40,7 +40,7 @@ public class CucumberHooks {
 
             // Nếu chạy trực tiếp từ file .feature (không qua testng.xml), mặc định mở Chrome
             if (browserName == null || browserName.isEmpty()) {
-                browserName = System.getProperty("browser", "chrome");
+                browserName = System.getProperty("browser", "firefox");
             }
 
             System.out.println("🚀 [THREAD " + Thread.currentThread().getId() + "] Đang khởi tạo trình duyệt: " + browserName.toUpperCase());

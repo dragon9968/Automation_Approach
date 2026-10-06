@@ -45,6 +45,7 @@ public class LoginSteps {
 
     @Then("the user verifies page title is {string}, URL contains {string} and welcome message contains {string}")
     public void verifyDashboardDetails(String expectedTitle, String expectedUrlPart, String expectedWelcomeText) {
+        dashboardPage.waitForPageTitle(driver, expectedTitle);
         dashboardPage.waitForUrlContains(driver, expectedUrlPart);
         Assert.assertEquals(dashboardPage.getDashboardPageTitle(), expectedTitle, "🚨 Lỗi: Page Title không khớp!");
         Assert.assertTrue(dashboardPage.getDashboardPageUrl().contains(expectedUrlPart), "🚨 Lỗi: URL không khớp!");
