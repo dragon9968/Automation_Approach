@@ -387,16 +387,7 @@ public class BasePage {
 
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	public boolean isElementDisplayed(WebDriver driver, String locatorType ,String... dynamicValues) {
 		return getWebElement(driver, getDynamicXpath(locatorType, dynamicValues)).isDisplayed();
 	}
