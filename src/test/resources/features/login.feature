@@ -13,7 +13,7 @@ Feature: TechPanda Account Login
     And the user clicks the Login button
     Then the user verifies page title is "My Account", URL contains "customer/account" and welcome message contains "Long Dinh Nguyen"
 
-  @login_unsuccess
+
   Scenario: TC_02_Login_With_Empty_Email_And_Password
     When the user enters the following login credentials:
       | email | password |

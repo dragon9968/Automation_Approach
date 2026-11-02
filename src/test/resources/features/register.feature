@@ -62,7 +62,7 @@ Feature: TechPanda Account Registration
     Then the system displays a registration success message: "Thank you for registering with Main Website Store."
     And the user logs out of the system
 
-
+  @register_outline
   Scenario Outline: Register validation errors
     When the user enters the following registration details:
       | firstName   | middleName   | lastName   | email   | password   | confirmPassword   |
