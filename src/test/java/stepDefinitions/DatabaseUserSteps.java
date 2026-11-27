@@ -14,7 +14,7 @@ public class DatabaseUserSteps {
     public void clearEmail(String email) {
         // Hứng lấy số dòng bị ảnh hưởng
         int rows = UserQueries.deleteUserByEmail(email);
-        System.out.println("--> [DB SETUP] Đã dọn dẹp " + rows + " bản ghi có email: " + email);
+        System.out.println("--> [DB SETUP] Cleaned up " + rows + " records with email: " + email);
     }
 
     @When("I insert a new user with details:")
@@ -22,14 +22,14 @@ public class DatabaseUserSteps {
         Map<String, String> row = data.get(0);
         int rows = UserQueries.insertUser(row.get("email"), row.get("pass"), row.get("status"));
 
-        Assert.assertEquals(rows, 1, "❌ Lỗi: Thêm mới user thất bại!");
-        System.out.println("--> [DB INSERT] Đã thêm thành công user: " + row.get("email"));
+        Assert.assertEquals(rows, 1, "❌ Error: Failed to insert user!");
+        System.out.println("--> [DB INSERT] Successfully inserted user: " + row.get("email"));
     }
 
     @When("I update status of user with email {string} to {string}")
     public void updateStatus(String email, String newStatus) {
         int rows = UserQueries.updateUserStatus(email, newStatus);
-        Assert.assertEquals(rows, 1, "❌ Lỗi: Cập nhật trạng thái thất bại!");
+        Assert.assertEquals(rows, 1, "❌ Error: Failed to update status!");
     }
 
     @Then("I verify user exists with details:")
@@ -40,27 +40,27 @@ public class DatabaseUserSteps {
         String actualPass = UserQueries.getUserPassword(email);
         String actualStatus = UserQueries.getUserStatus(email);
 
-        Assert.assertEquals(actualPass, row.get("pass"), "❌ Lỗi: Password dưới DB không khớp!");
-        Assert.assertEquals(actualStatus, row.get("status"), "❌ Lỗi: Status dưới DB không khớp!");
+        Assert.assertEquals(actualPass, row.get("pass"), "❌ Error: Database password does not match!");
+        Assert.assertEquals(actualStatus, row.get("status"), "❌ Error: Database status does not match!");
     }
 
     @Then("I verify user with email {string} no longer exists in the database")
     public void verifyNotExists(String email) {
         String actualPass = UserQueries.getUserPassword(email);
-        Assert.assertNull(actualPass, "❌ Lỗi: User vẫn còn tồn tại trong DB!");
+        Assert.assertNull(actualPass, "❌ Error: User still exists in the database!");
     }
 
     @Then("I verify status of user with email {string} is {string} in the database")
     public void verifyStatus(String email, String expectedStatus) {
         String actualStatus = UserQueries.getUserStatus(email);
-        Assert.assertEquals(actualStatus, expectedStatus, "❌ Lỗi: Trạng thái dưới DB không khớp!");
-        System.out.println("--> [DB SELECT] Xác nhận trạng thái của " + email + " đã chuyển sang: " + actualStatus);
+        Assert.assertEquals(actualStatus, expectedStatus, "❌ Error: Database status does not match!");
+        System.out.println("--> [DB SELECT] Confirmed status of " + email + " changed to: " + actualStatus);
     }
 
     @When("I delete user with email {string} from the database")
     public void deleteUser(String email) {
         int rows = UserQueries.deleteUserByEmail(email);
-        Assert.assertEquals(rows, 1, "❌ Lỗi: Xóa user thất bại!");
-        System.out.println("--> [DB DELETE] Đã xóa thành công user: " + email);
+        Assert.assertEquals(rows, 1, "❌ Error: Failed to delete user!");
+        System.out.println("--> [DB DELETE] Successfully deleted user: " + email);
     }
 }

@@ -28,10 +28,10 @@ public class AuthApiService {
                 formKey = formKeyElement.attr("value");
             }
         } catch (Exception e) {
-            System.out.println("Lỗi khi bốc form_key bằng Jsoup: " + e.getMessage());
+            System.out.println("Error while extracting form_key with Jsoup: " + e.getMessage());
         }
 
-        System.out.println("--> [TRUY VẾT] Form Key lấy được bằng Jsoup là: [" + formKey + "]");
+        System.out.println("--> [TRACE] Form Key retrieved with Jsoup: [" + formKey + "]");
 
         Response postResponse = RestAssured.given()
                 .redirects().follow(false)
@@ -45,7 +45,7 @@ public class AuthApiService {
                 .post(loginPostUrl);
 
         // 🌟 DÒNG KIỂM TRA 2: Xem Server thực chất đang điều hướng anh đi đâu (Dashboard hay trang Login lỗi)
-        System.out.println("--> [TRUY VẾT] Đường dẫn Redirect thực tế: " + postResponse.getHeader("Location"));
+        System.out.println("--> [TRACE] Actual redirect URL: " + postResponse.getHeader("Location"));
 
         return new LoginResponseDTO(
                 postResponse.getStatusCode(),

@@ -59,7 +59,6 @@
             <groupId>tech.grasshopper</groupId>
             <artifactId>extentreports-cucumber7-adapter</artifactId>
             <version>1.14.0</version>
-            <scope>test</scope>
         </dependency>
 
         <!-- PostgreSQL JDBC Driver - Giữ nguyên em này trong pom.xml nha anh -->
@@ -238,6 +237,7 @@
 
                     <!-- Argument -->
                     <argLine>
+                        -Dfile.encoding=UTF-8
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
                 </configuration>

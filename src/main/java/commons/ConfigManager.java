@@ -15,7 +15,7 @@ public class ConfigManager {
             InputStream input = ConfigManager.class.getClassLoader().getResourceAsStream(fileName);
             if (input != null) {
                 prop.load(input);
-                System.out.println("🚀 [CONFIG] Đã load cấu hình môi trường: " + env.toUpperCase());
+                System.out.println("🚀 [CONFIG] Loaded environment configuration: " + env.toUpperCase());
             } else {
                 throw new RuntimeException("❌ Không tìm thấy file cấu hình: " + fileName);
             }

@@ -29,7 +29,14 @@ public class BasePage {
 		return new BasePage();
 		
 	}
-
+	protected void logStep(String message) {
+		System.out.println("   --> [STEP] " + message);
+		try {
+			com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter.addTestStepLog("↳ " + message);
+		} catch (Exception ignored) {
+			// Bỏ qua nếu chạy lẻ từ file .feature mà không bật Extent Report
+		}
+	}
 	public void openPageUrl(WebDriver driver, String pageUrl) {
 		driver.get(pageUrl);
 	}
@@ -370,17 +377,17 @@ public class BasePage {
 		overrideImplicitTimeout(driver,LONG_TIMEOUT);
 
 		if (elements.size() == 0) {
-			System.out.println("Case 3 - Element ko co trong DOM");
+			System.out.println("Case 3 - Element is not in the DOM");
 			System.out.println("End Time = " + new Date().toString());
 			return true;
 
 		} else if (elements.size() > 0 && !elements.get(0).isDisplayed()) {
-			System.out.println("Case 2 - Element co trong DOM nhung ko hien thi tren UI");
+			System.out.println("Case 2 - Element is in the DOM but not visible in the UI");
 			System.out.println("End Time = " + new Date());
 			return true;
 		}
 		else {
-			System.out.println("Case 1 - Element co trong DOM va hien thi tren UI");
+			System.out.println("Case 1 - Element is in the DOM and visible in the UI");
 			return false;
 		}
 	}
@@ -588,4 +595,3 @@ public class BasePage {
 	private long LONG_TIMEOUT = GlobalConstants.LONG_TIMEOUT;
 	private long SHORT_TIMEOUT = GlobalConstants.SHORT_TIMEOUT;
 }
-

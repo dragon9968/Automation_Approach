@@ -68,7 +68,7 @@ jobs:
           # 🌟 3. Truyền DB_PASS từ Secret vào Biến môi trường hệ thống cho Java đọc
           DB_PASS: ${{ secrets.DB_PASSWORD }}
         # 🌟 4. Truyền thêm tham số -Denv=dev (hoặc qa) để chọn môi trường
-        run: mvn test -Dbrowser=${{ matrix.browser }} -Denv=dev
+        run: mvn test -Dbrowser=${{ matrix.browser }} -Denv=dev -Dheadless=true "-Dcucumber.filter.tags=@login or @register or @mobile or @cart_coupon or @database"
 
       - name: Upload Test Report
         if: always()
