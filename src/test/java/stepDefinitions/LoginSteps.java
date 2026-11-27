@@ -47,18 +47,18 @@ public class LoginSteps {
     public void verifyDashboardDetails(String expectedTitle, String expectedUrlPart, String expectedWelcomeText) {
         dashboardPage.waitForPageTitle(driver, expectedTitle);
         dashboardPage.waitForUrlContains(driver, expectedUrlPart);
-        Assert.assertEquals(dashboardPage.getDashboardPageTitle(), expectedTitle, "🚨 Lỗi: Page Title không khớp!");
-        Assert.assertTrue(dashboardPage.getDashboardPageUrl().contains(expectedUrlPart), "🚨 Lỗi: URL không khớp!");
+        Assert.assertEquals(dashboardPage.getDashboardPageTitle(), expectedTitle, "🚨 Error: Page title does not match!");
+        Assert.assertTrue(dashboardPage.getDashboardPageUrl().contains(expectedUrlPart), "🚨 Error: URL does not match!");
         String actualWelcomeText = dashboardPage.getWelcomeMessageText().toLowerCase();
-        Assert.assertTrue(actualWelcomeText.contains(expectedWelcomeText.toLowerCase()), "🚨 Lỗi: Không tìm thấy tên chào mừng!");
+        Assert.assertTrue(actualWelcomeText.contains(expectedWelcomeText.toLowerCase()), "🚨 Error: Welcome name was not found!");
 
-        System.out.println("=== [PASSED] Xác minh trang Dashboard ĐỘNG thành công 100%! ===");
+        System.out.println("=== [PASSED] Dashboard page verified successfully! ===");
     }
 
     // 🌟 BỔ SUNG 1: Verify lỗi validation tại ô Email
     @Then("field validation error {string} should appear at email textbox")
     public void fieldValidationErrorShouldAppearAtEmailTextbox(String expectedErrorMessage) {
-        Assert.assertEquals(loginPage.getErrorMessageAtEmailTextbox(), expectedErrorMessage, "🚨 Lỗi: Message validation ô Email không khớp!");
+        Assert.assertEquals(loginPage.getErrorMessageAtEmailTextbox(), expectedErrorMessage, "🚨 Error: Email field validation message does not match!");
     }
 
     @Then("Email error message is displayed at Login page {string}")
@@ -77,7 +77,7 @@ public class LoginSteps {
                     || actualMsg.contains("Vui lòng bao gồm");
 
             Assert.assertTrue(isMatched,
-                    "\n❌ Thông báo lỗi HTML5 Email không khớp trên trình duyệt này!" +
+                    "\n❌ HTML5 email validation message does not match in this browser!" +
                             "\nActual: " + actualMsg +
                             "\nExpected: " + expectedMsg);
         }
@@ -85,12 +85,45 @@ public class LoginSteps {
     // 🌟 BỔ SUNG 2: Verify lỗi validation tại ô Password
     @Then("field validation error {string} should appear at password textbox")
     public void fieldValidationErrorShouldAppearAtPasswordTextbox(String expectedErrorMessage) {
-        Assert.assertEquals(loginPage.getErrorMessageAtPasswordTextbox(), expectedErrorMessage, "🚨 Lỗi: Message validation ô Password không khớp!");
+        Assert.assertEquals(loginPage.getErrorMessageAtPasswordTextbox(), expectedErrorMessage, "🚨 Error: Password field validation message does not match!");
     }
 
     // 🌟 BỔ SUNG 3: Verify thông báo lỗi chung trên cùng (Server response error)
     @Then("the global error message {string} should appear")
     public void theGlobalErrorMessageShouldAppear(String expectedErrorMessage) {
-        Assert.assertEquals(loginPage.getUnsuccessfullErrorMessage(), expectedErrorMessage, "🚨 Lỗi: Thông báo lỗi chung từ Server không khớp!");
+        Assert.assertEquals(loginPage.getUnsuccessfullErrorMessage(), expectedErrorMessage, "🚨 Error: Global server error message does not match!");
+    }
+
+    @Then("the login validation error message {string} should be displayed")
+    public void theLoginValidationErrorMessageShouldBeDisplayed(String expectedError) {
+        // 1. Lỗi HTML5 của trình duyệt (thiếu ký tự '@')
+        if (expectedError.contains("missing an '@'")) {
+            String actualMsg = loginPage.getHTML5EmailValidationMessage();
+            boolean isMatched = actualMsg.equals(expectedError)
+                    || actualMsg.contains("Please enter an email address")
+                    || actualMsg.contains("Vui lòng bao gồm");
+
+            Assert.assertTrue(isMatched,
+                    "\n❌ HTML5 email validation message does not match in this browser!" +
+                            "\nActual: " + actualMsg +
+                            "\nExpected: " + expectedError);
+        }
+        // 2. Lỗi bỏ trống cả Email và Password
+        else if (expectedError.equals("This is a required field.")) {
+            Assert.assertEquals(loginPage.getErrorMessageAtEmailTextbox(), expectedError, "🚨 Error: Email field validation message does not match!");
+            Assert.assertEquals(loginPage.getErrorMessageAtPasswordTextbox(), expectedError, "🚨 Error: Password field validation message does not match!");
+        }
+        // 3. Lỗi sai định dạng Email (Magento validation)
+        else if (expectedError.contains("valid email address")) {
+            Assert.assertEquals(loginPage.getErrorMessageAtEmailTextbox(), expectedError, "🚨 Error: Email field validation message does not match!");
+        }
+        // 4. Lỗi mật khẩu ngắn hơn 6 ký tự (Magento validation)
+        else if (expectedError.contains("6 or more characters")) {
+            Assert.assertEquals(loginPage.getErrorMessageAtPasswordTextbox(), expectedError, "🚨 Error: Password field validation message does not match!");
+        }
+        // 5. Lỗi đăng nhập sai tài khoản/mật khẩu từ Server (Global error)
+        else {
+            Assert.assertEquals(loginPage.getUnsuccessfullErrorMessage(), expectedError, "🚨 Error: Global server error message does not match!");
+        }
     }
 }

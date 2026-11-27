@@ -26,27 +26,22 @@ public class RegisterSteps{
     public void inputFirstname(String value) {
         registerPage.inputToFirstnameTextbox(value);
     }
-
     @When("User input lastname {string}")
     public void inputLastname(String value) {
         registerPage.inputToLastnameTextbox(value);
     }
-
     @When("User input email {string}")
     public void inputEmail(String value) {
         registerPage.inputToEmailTextbox(value);
     }
-
     @When("User input password {string}")
     public void inputPassword(String value) {
         registerPage.inputToPasswordTextbox(value);
     }
-
     @When("User input confirm password {string}")
     public void inputConfirmPassword(String value) {
         registerPage.inputToConfirmPasswordTextbox(value);
     }
-
     @When("User input existing email {string}")
     public void inputExistingEmail(String value) {
         registerPage.inputToEmailTextbox(value);
@@ -62,21 +57,32 @@ public class RegisterSteps{
 
     @And("the user enters the following registration details:")
     public void theUserEntersTheFollowingRegistrationDetails(List<UserRegisterDTO> dataList) {
-    	UserRegisterDTO registerData = dataList.get(0);
-        
-        String emailAddress = registerData.getEmail();
-        if (emailAddress.equals("random_email")) {
+        UserRegisterDTO registerData = dataList.get(0);
+
+        String firstName = getSafeValue(registerData.getFirstName());
+        String middleName = getSafeValue(registerData.getMiddleName());
+        String lastName = getSafeValue(registerData.getLastName());
+        String emailAddress = getSafeValue(registerData.getEmail());
+        String password = getSafeValue(registerData.getPassword());
+        String confirmPassword = getSafeValue(registerData.getConfirmPassword());
+
+        // Đảo chuỗi hằng lên trước để không bao giờ bị NullPointerException
+        if ("random_email".equals(emailAddress)) {
             emailAddress = DataHelper.getRandomEmail();
         }
-        registerPage.inputToFirstnameTextbox(registerData.getFirstName());
-        String middleName = registerData.getMiddleName();
-        if (middleName != null && !middleName.trim().isEmpty()) {
+
+        registerPage.inputToFirstnameTextbox(firstName);
+        if (!middleName.isEmpty()) {
             registerPage.inputToMiddlenameTextbox(middleName);
         }
-        registerPage.inputToLastnameTextbox(registerData.getLastName());
+        registerPage.inputToLastnameTextbox(lastName);
         registerPage.inputToEmailTextbox(emailAddress);
-        registerPage.inputToPasswordTextbox(registerData.getPassword());
-        registerPage.inputToConfirmPasswordTextbox(registerData.getConfirmPassword());
+        registerPage.inputToPasswordTextbox(password);
+        registerPage.inputToConfirmPasswordTextbox(confirmPassword);
+    }
+
+    private String getSafeValue(String value) {
+        return value == null ? "" : value.trim();
     }
     
     @And("the user selects the Sign Up for Newsletter checkbox")
@@ -112,13 +118,11 @@ public class RegisterSteps{
         // 2. Nếu là case nhập sai cú pháp email (Bong bóng HTML5 của Browser)
         else {
             String actualMsg = registerPage.getHTML5EmailValidationMessage();
-
             // Linh hoạt kiểm tra: Khớp chính xác câu của Chrome HOẶC chứa câu mặc định của Firefox
             boolean isMatched = actualMsg.equals(expectedMsg)
                     || actualMsg.contains("Please enter an email address");
-
             Assert.assertTrue(isMatched,
-                    "\n❌ Thông báo lỗi HTML5 Email không khớp trên trình duyệt này!" +
+                    "\n❌ HTML5 email validation message does not match in this browser!" +
                             "\nActual: " + actualMsg +
                             "\nExpected: " + expectedMsg);
         }
@@ -193,7 +197,7 @@ public class RegisterSteps{
     public void verifyValidationErrorMessage(String expectedError) {
         String actualError = registerPage.getRegisterErrorMessage();
         Assert.assertTrue(actualError.contains(expectedError),
-                "Lỗi không khớp! \nExpected chứa: " + expectedError + "\nActual: " + actualError);
+                "Error: Validation message does not match! \nExpected to contain: " + expectedError + "\nActual: " + actualError);
     }
 
 }

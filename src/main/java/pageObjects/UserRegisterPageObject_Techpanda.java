@@ -153,7 +153,13 @@ public class UserRegisterPageObject_Techpanda extends BasePage{
 			return getElementText(driver, RegisterPageUI_Techpanda.CONFIRM_PASSWORD_NOT_MATCH_ERROR_MESSAGE);
 		}
 
-		// 5. Kiểm tra lỗi tại các ô Input thông thường (Email/Pass/ConfirmPass)
+		// 5. Kiểm tra lỗi tại các ô Input thông thường (FirstName/LastName/Email/Pass/ConfirmPass)
+		if (isElementDisplayed(driver, RegisterPageUI_Techpanda.FIRST_NAME_ERROR_MESSAGE)) {
+			return getElementText(driver, RegisterPageUI_Techpanda.FIRST_NAME_ERROR_MESSAGE);
+		}
+		if (isElementDisplayed(driver, RegisterPageUI_Techpanda.LAST_NAME_ERROR_MESSAGE)) {
+			return getElementText(driver, RegisterPageUI_Techpanda.LAST_NAME_ERROR_MESSAGE);
+		}
 		if (isElementDisplayed(driver, RegisterPageUI_Techpanda.EMAIL_ERROR_MESSAGE)) {
 			return getElementText(driver, RegisterPageUI_Techpanda.EMAIL_ERROR_MESSAGE);
 		}

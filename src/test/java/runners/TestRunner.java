@@ -2,15 +2,17 @@ package runners;
 import org.testng.annotations.BeforeClass;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
 import org.testng.ITestContext;
 
 @CucumberOptions(
     features = "src/test/resources/features",// Đường dẫn tới thư mục chứa file .feature
     glue = {"stepDefinitions", "hooks"},// Nơi chứa code xử lý step và hooks
-    tags = "",
+    tags = "@login",
     plugin = {
-        "pretty",
+        "pretty", //Plugin "pretty" của Cucumber chỉ đẹp khi chạy 1 luồng
+        "summary", // Chay da luồng thì dùng summary để hiển thị tổng quan kết quả
         "html:target/cucumber-report.html", // Xuất báo cáo html cơ bản
         "html:target/cucumber-reports/cucumber-pretty.html",
         "json:target/cucumber-reports/cucumber.json",
@@ -28,9 +30,9 @@ public class TestRunner extends AbstractTestNGCucumberTests {
     }
 
     // 🌟 Set trực tiếp số luồng cho IDE (Test Runer) tại đây (Ví dụ: 2 luồng)
-    @BeforeClass(alwaysRun = true)
+    @BeforeSuite(alwaysRun = true)
     public void setUpParallel(ITestContext context) {
-        context.getSuite().getXmlSuite().setDataProviderThreadCount(4);
+        context.getSuite().getXmlSuite().setDataProviderThreadCount(1);
     }
 
     // 🌟 KHỐI TĨNH THẦN CHÚ: Chạy ngay khi nạp class, chấp hết mọi loại vòng đời!

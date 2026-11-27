@@ -5,7 +5,7 @@ Feature: TechPanda Account Registration
     Given the user is on the TechPanda homepage
     When the user navigates to the Registration page
 
-  Scenario: Register with empty data
+  Scenario: TC_01_Register with empty data
     When the user clicks the Register button
     Then Firstname error message is displayed "This is a required field."
     And Lastname error message is displayed "This is a required field."
@@ -14,8 +14,7 @@ Feature: TechPanda Account Registration
     And Confirm Password error message is displayed "This is a required field."
 
   #Dùng cách này giúp lượt bỏ nhiều @Then trong step definition.
-
-  Scenario: Register with empty data (more optimized)
+  Scenario: TC_02_Register with empty data (more optimized)
     When the user clicks the Register button
     Then the error message "This is a required field." is displayed at "firstName"
     And the error message "This is a required field." is displayed at "lastName"
@@ -23,37 +22,35 @@ Feature: TechPanda Account Registration
     And the error message "This is a required field." is displayed at "password"
     And the error message "This is a required field." is displayed at "confirmPassword"
 
-
-  Scenario: Register with invalid email
+  Scenario: TC_03_Register with invalid email
     When the user enters the following registration details:
       | firstName | middleName | lastName | email    | password | confirmPassword |
       | Long      |            | Nguyen   | longmail | 123456   | 123456          |
     And the user clicks the Register button
     Then Email error message is displayed "Please include an '@' in the email address. 'longmail' is missing an '@'."
 
-  Scenario: Register with existing email
+  Scenario: TC_04_Register with existing email
     When the user enters the following registration details:
       | firstName | middleName | lastName | email                     | password | confirmPassword |
       | Long      | Dinh       | Nguyen   | long_tester_pro@gmail.com | 123456   | 123456          |
     And the user clicks the Register button
     Then Existing email error message is displayed "There is already an account"
 
-  Scenario: Register with confirm password not match
+  Scenario: TC_05_Register with confirm password not match
     When the user enters the following registration details:
       | firstName | middleName | lastName | email        | password | confirmPassword |
       | Long      | Dinh       | Nguyen   | random_email | 123456   | 123457          |
     And the user clicks the Register button
     Then Confirm Password error message not match is displayed "Please make sure your passwords match."
 
-  Scenario: Register with a password less than 6 characters
+  Scenario: TC_06_Register with a password less than 6 characters
     When the user enters the following registration details:
       | firstName | middleName | lastName | email        | password | confirmPassword |
       | long      | dinh       | nguyen   | random_email | 123      | 123             |
     And the user clicks the Register button
     Then the system displays a password error message: "Please enter 6 or more characters without leading or trailing spaces."
 
-
-  Scenario: Register a new account successfully with valid information
+  Scenario: TC_07_Register a new account successfully with valid information
     When the user enters the following registration details:
       | firstName | middleName | lastName | email        | password | confirmPassword |
       | long      | dinh       | nguyen   | random_email | 123456   | 123456          |
@@ -63,7 +60,7 @@ Feature: TechPanda Account Registration
     And the user logs out of the system
 
   @register_outline
-  Scenario Outline: Register validation errors
+  Scenario Outline: TC_08_Register validation errors
     When the user enters the following registration details:
       | firstName   | middleName   | lastName   | email   | password   | confirmPassword   |
       | <firstName> | <middleName> | <lastName> | <email> | <password> | <confirmPassword> |
@@ -71,8 +68,9 @@ Feature: TechPanda Account Registration
     Then the validation error message "<expectedError>" should be displayed
 
     Examples:
-      | firstName | middleName | lastName | email                     | password | confirmPassword | expectedError                                                          |
-      | Long      |            | Nguyen   | longmail                  | 123456   | 123456          | Please include an '@' in the email address. 'longmail' is missing an '@'.|
-      | Long      | Dinh       | Nguyen   | long_tester_pro@gmail.com | 123456   | 123456          | There is already an account                                             |
-      | Long      | Dinh       | Nguyen   | random_email              | 123456   | 123457          | Please make sure your passwords match.                                 |
-      | long      | dinh       | nguyen   | random_email              | 123      | 123             | Please enter 6 or more characters without leading or trailing spaces. |
+      | firstName | middleName | lastName | email                     | password | confirmPassword | expectedError                                                             |
+      |           |            |          |                           |          |                 | This is a required field.                                                 |
+      | Long      |            | Nguyen   | longmail                  | 123456   | 123456          | Please include an '@' in the email address. 'longmail' is missing an '@'. |
+      | Long      | Dinh       | Nguyen   | long_tester_pro@gmail.com | 123456   | 123456          | There is already an account                                               |
+      | Long      | Dinh       | Nguyen   | random_email              | 123456   | 123457          | Please make sure your passwords match.                                    |
+      | long      | dinh       | nguyen   | random_email              | 123      | 123             | Please enter 6 or more characters without leading or trailing spaces.     |

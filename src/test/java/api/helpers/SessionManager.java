@@ -14,11 +14,11 @@ public class SessionManager {
     public static void injectLoginSession(WebDriver driver, String username, String password) {
         driver.manage().deleteAllCookies();
 
-        System.out.println("--> [TRUY VẾT] Đang tiến hành gọi API Login...");
+        System.out.println("--> [TRACE] Initiating API Login call...");
         AuthApiService apiService = new AuthApiService();
         LoginRequestDTO requestData = new LoginRequestDTO(username, password);
         LoginResponseDTO responseData = apiService.executeLoginApi(requestData);
-        System.out.println("--> [TRUY VẾT] Mã trạng thái API trả về: " + responseData.getStatusCode());
+        System.out.println("--> [TRACE] API response status code: " + responseData.getStatusCode());
         //dùng properties file
         String domain = URI.create(ConfigManager.getAppUrl()).getHost();
 
@@ -32,12 +32,12 @@ public class SessionManager {
                         .build();
 
                 driver.manage().addCookie(seleniumCookie);
-                System.out.println("--> [TRUY VẾT] Đã tiêm thành công Cookie Đăng Nhập VIP vào máu Chrome!");
+                System.out.println("--> [TRACE] Successfully injected the VIP Login Cookie into browser!");
             }
         }
 
         // 🌟 Tận dụng GlobalConstants cho đường dẫn trang Account
         driver.get(GlobalConstants.TECHPANDA_ACCOUNT_URL);
-        System.out.println("=== [SUCCESS] TRÌNH DUYỆT ĐÃ ĐƯỢC AUTO LOGIN SẴN SÀNG KHỞI CHẠY TEST CASE ===");
+        System.out.println("=== [SUCCESS] BROWSER HAS BEEN AUTO-LOGGED IN AND READY TO RUN TEST CASES ===");
     }
 }

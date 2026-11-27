@@ -22,7 +22,7 @@ public class BaseTest {
 	}
 
 	// 🌟 Hàm khởi tạo Driver với tên mới createDriver
-	public static synchronized WebDriver createDriver(String browserName) {
+	public static  WebDriver createDriver(String browserName) {
 		WebDriver driver;
 		boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "false"))
 				|| System.getenv("GITHUB_ACTIONS") != null;

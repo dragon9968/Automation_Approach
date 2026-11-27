@@ -3,11 +3,7 @@ package commons;
 import org.openqa.selenium.WebDriver;
 
 
-import pageObjects.UserRegisterPageObject_Techpanda;
-import pageObjects.DashBoardPageObject_Techpanda;
-import pageObjects.MobilePageObject_Techpanda;
-import pageObjects.UserHomePageObject_Techpanda;
-import pageObjects.UserLoginPageObject_Techpanda;
+import pageObjects.*;
 
 
 public class PageGeneratorManager {
@@ -31,4 +27,8 @@ public class PageGeneratorManager {
 	public static DashBoardPageObject_Techpanda getDashBoardPageObject_Techpanda(WebDriver driver) {
         return new DashBoardPageObject_Techpanda(driver);
     }
+
+	public static CartPageObject_Techpanda getCartPageTechPanda(WebDriver driver) {
+		return new CartPageObject_Techpanda(driver);
+	}
 }
